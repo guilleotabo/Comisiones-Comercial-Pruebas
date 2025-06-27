@@ -1,3 +1,4 @@
+import { ProfileStorage } from "./storage.js";
 let niveles;
 let metas;
 let pagos;
@@ -6,19 +7,6 @@ let multEmpatia;
 let multProceso;
 let multMora;
 
-const STORAGE_KEY = 'commission_profiles';
-
-function loadStoredProfiles() {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return null;
-        const data = JSON.parse(stored);
-        return data.profiles || null;
-    } catch (e) {
-        console.error('Error cargando perfiles almacenados:', e);
-        return null;
-    }
-}
 
 const baseConfig = {
     niveles: ['Capilla', 'Junior', 'Senior A', 'Senior B', 'Máster', 'Genio'],
@@ -80,7 +68,7 @@ const defaultProfiles = {
     empresarial_2: { id: 'empresarial_2', name: 'Empresarial 2', config: cloneConfig(baseConfig) }
 };
 
-let profiles = loadStoredProfiles() || cloneConfig(defaultProfiles);
+let profiles = ProfileStorage.loadProfiles() || cloneConfig(defaultProfiles);
 
 let currentProfile = 'agil_1';
 
@@ -246,3 +234,5 @@ document.getElementById('pdfButton').addEventListener('click', descargarPDF);
 const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
 updateCalculations();
+
+window.changeProfile = changeProfile;
