@@ -16,6 +16,28 @@ const pagos = {
     equipo: [0, 0, 0, 500000, 800000, 1000000]
 };
 
+// Cargar configuración guardada desde el panel admin
+try {
+    const stored = localStorage.getItem('commission_profiles');
+    if (stored) {
+        const data = JSON.parse(stored).profiles || JSON.parse(stored);
+        const profile = data['agil_1'];
+        if (profile) {
+            pagos.base = profile.config.base;
+            Object.assign(metas, profile.config.metas);
+            Object.assign(pagos, profile.config.pagos);
+
+            // Reemplazar tablas de multiplicadores
+            multConversion.splice(0, multConversion.length, ...profile.config.multiplicadores.conversion);
+            multEmpatia.splice(0, multEmpatia.length, ...profile.config.multiplicadores.empatia);
+            multProceso.splice(0, multProceso.length, ...profile.config.multiplicadores.proceso);
+            multMora.splice(0, multMora.length, ...profile.config.multiplicadores.mora);
+        }
+    }
+} catch (e) {
+    console.error('Error aplicando perfiles almacenados', e);
+}
+
 const multConversion = [
     {min: 10, mult: 1.1},
     {min: 8, mult: 1.0},
