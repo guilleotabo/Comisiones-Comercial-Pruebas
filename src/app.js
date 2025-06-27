@@ -5,6 +5,7 @@ import { loadStoredProfiles } from './modules/storage.js';
 import { calcularComisionTotal, calcularNivel } from './modules/calculations.js';
 import { updateProgress, resetProgressBars, initProgressBars, initMoneyFormat, togglePDFMenu } from './modules/ui.js';
 import { initGamification, checkAchievements, shareResults } from './modules/gamification.js';
+import { saveProfiles as storeProfiles } from './modules/storage.js';
 
 let niveles;
 let metas;
@@ -296,6 +297,98 @@ window.toggleTheme = toggleTheme;
 window.closeTour = closeTour;
 window.shareResults = shareResults;
 
+function toggleQuickSettings() {
+    const panel = document.getElementById('quickSettingsPanel');
+    const btn = document.getElementById('quickSettingsBtn');
+    if (!panel || !btn) return;
+    const open = panel.classList.toggle('open');
+    btn.classList.toggle('rotate', open);
+    panel.classList.toggle('hidden', !open);
+    panel.setAttribute('aria-hidden', String(!open));
+}
+
+function exportProfiles() {
+    const data = localStorage.getItem('commission_profiles') || '{}';
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'perfiles_comisiones.json';
+    a.click();
+    recordHistory('Se exportaron perfiles');
+}
+
+function importProfiles() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (e) => {
+        try {
+            const file = e.target.files[0];
+            const text = await file.text();
+            localStorage.setItem('commission_profiles', text);
+            profiles = JSON.parse(text).profiles || profiles;
+            storeProfiles(profiles);
+            applyProfile(currentProfile);
+            recordHistory('Se importaron perfiles');
+        } catch (err) {
+            alert('Error al importar: ' + err.message);
+        }
+    };
+    input.click();
+}
+
+function recordHistory(entry) {
+    const history = JSON.parse(localStorage.getItem('qs_history') || '[]');
+    history.unshift({ entry, date: new Date().toLocaleString() });
+    localStorage.setItem('qs_history', JSON.stringify(history.slice(0, 10)));
+    updateHistory();
+}
+
+function updateHistory() {
+    const list = document.getElementById('qsHistory');
+    if (!list) return;
+    list.innerHTML = '';
+    const history = JSON.parse(localStorage.getItem('qs_history') || '[]');
+    history.forEach(h => {
+        const li = document.createElement('li');
+        li.textContent = `${h.entry} - ${h.date}`;
+        list.appendChild(li);
+    });
+}
+
+function initQuickSettings() {
+    const btn = document.getElementById('quickSettingsBtn');
+    const closeBtn = document.getElementById('closeQsBtn');
+    if (btn) btn.addEventListener('click', toggleQuickSettings);
+    if (closeBtn) closeBtn.addEventListener('click', toggleQuickSettings);
+
+    const qsProfile = document.getElementById('qsProfile');
+    if (qsProfile) {
+        Object.values(profiles).forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name || p.id;
+            qsProfile.appendChild(opt);
+        });
+        qsProfile.value = currentProfile;
+        qsProfile.addEventListener('change', e => changeProfile(e.target.value));
+    }
+
+    const qsTheme = document.getElementById('qsTheme');
+    if (qsTheme) {
+        qsTheme.value = localStorage.getItem('theme') || 'light';
+        qsTheme.addEventListener('change', e => applyTheme(e.target.value));
+    }
+
+    const exportBtn = document.getElementById('qsExport');
+    const importBtn = document.getElementById('qsImport');
+    if (exportBtn) exportBtn.addEventListener('click', exportProfiles);
+    if (importBtn) importBtn.addEventListener('click', importProfiles);
+
+    updateHistory();
+}
+
 const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
 initMoneyFormat();
@@ -305,4 +398,5 @@ initGaugeCharts();
 initTheme();
 initTour();
 initGamification();
+initQuickSettings();
 updateCalculations();
