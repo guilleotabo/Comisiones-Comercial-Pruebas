@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Comisiones - SERSA</title>
+    <link rel="stylesheet" href="comisiones.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div id="container">
+    <aside id="sidebar">
+        <header>
+            <h1>Comisiones SERSA</h1>
+            <button id="pdfButton" type="button">📄 PDF</button>
+        </header>
+        <form id="datosForm">
+            <label>Nivel anterior
+                <select id="nivelAnterior">
+                    <option value="0">Capilla</option>
+                    <option value="1">Junior</option>
+                    <option value="2">Senior A</option>
+                    <option value="3">Senior B</option>
+                    <option value="4">Máster</option>
+                    <option value="5">Genio</option>
+                </select>
+            </label>
+            <label>Monto Interno* <input type="number" id="montoInterno" required></label>
+            <label>Monto Externo* <input type="number" id="montoExterno" required></label>
+            <label>Recuperados* <input type="number" id="montoRecuperado" required></label>
+            <label>Cantidad* <input type="number" id="cantidad" required></label>
+            <label>Menor Semana* <input type="number" id="menorSemana" min="0" max="4" required></label>
+            <label>Menor nivel del equipo
+                <select id="nivelEquipo">
+                    <option value="0">Capilla</option>
+                    <option value="1">Junior</option>
+                    <option value="2">Senior A</option>
+                    <option value="3">Senior B</option>
+                    <option value="4">Máster</option>
+                    <option value="5">Genio</option>
+                </select>
+            </label>
+            <fieldset>
+                <legend>Multiplicadores (%)</legend>
+                <label>Conversión <input type="number" id="conv" required></label>
+                <label>Empatía <input type="number" id="emp" required></label>
+                <label>Proceso <input type="number" id="proc" required></label>
+                <label>Mora <input type="number" id="mora" required></label>
+            </fieldset>
+        </form>
+    </aside>
+    <main id="result">
+        <section>
+            <h2>Comisión Final</h2>
+            <div id="comisionTotal">0</div>
+        </section>
+        <section id="detalle"></section>
+    </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
