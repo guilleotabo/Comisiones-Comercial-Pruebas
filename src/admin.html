@@ -12,8 +12,9 @@
         <div id="loginScreen" class="login-container">
             <h1>🔐 Administración del Sistema</h1>
             <form id="loginForm">
-                <input type="password" id="adminPin" placeholder="PIN de 6 dígitos" maxlength="6">
-                <button type="submit">Ingresar</button>
+                <input type="password" id="adminPin" placeholder="PIN de 6 dígitos" maxlength="6" aria-label="PIN de administración" aria-required="true" aria-describedby="adminPinHelp">
+                <small id="adminPinHelp" class="sr-only">Ingrese el PIN proporcionado</small>
+                <button type="submit" class="btn-save">Ingresar</button>
             </form>
         </div>
 
