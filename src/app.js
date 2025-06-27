@@ -56,10 +56,15 @@ function nivelPorValor(valor, metasArr) {
 }
 
 function getMult(valor, tabla) {
+    let mult = tabla[tabla.length - 1].mult;
+    let bestMin = -Infinity;
     for (let i = 0; i < tabla.length; i++) {
-        if (valor >= tabla[i].min) return tabla[i].mult;
+        if (valor >= tabla[i].min && tabla[i].min >= bestMin) {
+            bestMin = tabla[i].min;
+            mult = tabla[i].mult;
+        }
     }
-    return tabla[tabla.length - 1].mult;
+    return mult;
 }
 
 function calcular() {
