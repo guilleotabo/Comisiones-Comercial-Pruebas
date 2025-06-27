@@ -6,6 +6,8 @@
     <title>Sistema de Comisiones - SERSA</title>
     <link rel="stylesheet" href="comisiones.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
 <div id="container">
@@ -18,7 +20,13 @@
                 <option value="empresarial_1">Empresarial 1</option>
                 <option value="empresarial_2">Empresarial 2</option>
             </select>
-            <button id="pdfButton" type="button">📄 PDF</button>
+            <div class="pdf-menu">
+                <button type="button" class="header-btn" onclick="togglePDFMenu()">📄 PDF ▼</button>
+                <div class="pdf-menu-options" id="pdfMenuOptions" style="display: none;">
+                    <button type="button" onclick="descargarPDF()">📄 PDF Simple</button>
+                    <button type="button" onclick="generateProfessionalPDF()">📊 PDF Profesional</button>
+                </div>
+            </div>
         </header>
         <form id="datosForm">
             <label>Nivel anterior
@@ -31,23 +39,38 @@
                     <option value="5">Genio</option>
                 </select>
             </label>
-            <label>Monto Interno* <input type="text" id="montoInterno" inputmode="numeric" required></label>
+            <label>Monto Interno*
+                <input type="text" id="montoInterno" inputmode="numeric" required aria-label="Monto Interno" aria-required="true" aria-describedby="descMontoInterno">
+            </label>
+            <small id="descMontoInterno" class="sr-only">Monto total de operaciones internas</small>
             <div id="progInterno" class="progress">
                 <div></div><div></div><div></div><div></div><div></div><div></div>
             </div>
-            <label>Monto Externo* <input type="text" id="montoExterno" inputmode="numeric" required></label>
+            <label>Monto Externo*
+                <input type="text" id="montoExterno" inputmode="numeric" required aria-label="Monto Externo" aria-required="true" aria-describedby="descMontoExterno">
+            </label>
+            <small id="descMontoExterno" class="sr-only">Monto total de operaciones externas</small>
             <div id="progExterno" class="progress">
                 <div></div><div></div><div></div><div></div><div></div><div></div>
             </div>
-            <label>Recuperados* <input type="text" id="montoRecuperado" inputmode="numeric" required></label>
+            <label>Recuperados*
+                <input type="text" id="montoRecuperado" inputmode="numeric" required aria-label="Monto Recuperado" aria-required="true" aria-describedby="descRecuperado">
+            </label>
+            <small id="descRecuperado" class="sr-only">Monto recuperado superior a 3M</small>
             <div id="progRecuperado" class="progress">
                 <div></div><div></div><div></div><div></div><div></div><div></div>
             </div>
-            <label>Cantidad* <input type="number" id="cantidad" required></label>
+            <label>Cantidad*
+                <input type="number" id="cantidad" required aria-label="Cantidad de desembolsos" aria-required="true" aria-describedby="descCantidad">
+            </label>
+            <small id="descCantidad" class="sr-only">Número total de desembolsos</small>
             <div id="progCantidad" class="progress">
                 <div></div><div></div><div></div><div></div><div></div><div></div>
             </div>
-            <label>Menor Semana* <input type="number" id="menorSemana" min="0" max="4" required></label>
+            <label>Menor Semana*
+                <input type="number" id="menorSemana" min="0" max="4" required aria-label="Menor semana" aria-required="true" aria-describedby="descSemana">
+            </label>
+            <small id="descSemana" class="sr-only">Semanas con al menos un desembolso</small>
             <label>Menor nivel del equipo
                 <select id="nivelEquipo">
                     <option value="0">Capilla</option>
@@ -60,10 +83,22 @@
             </label>
             <fieldset>
                 <legend>Multiplicadores (%)</legend>
-                <label>Conversión <input type="number" id="conv" required></label>
-                <label>Empatía <input type="number" id="emp" required></label>
-                <label>Proceso <input type="number" id="proc" required></label>
-                <label>Mora <input type="number" id="mora" required></label>
+                <label>Conversión
+                    <input type="number" id="conv" required aria-label="Porcentaje de conversión" aria-required="true" aria-describedby="descConv">
+                </label>
+                <small id="descConv" class="sr-only">Resultado de conversión (%)</small>
+                <label>Empatía
+                    <input type="number" id="emp" required aria-label="Porcentaje de empatía" aria-required="true" aria-describedby="descEmp">
+                </label>
+                <small id="descEmp" class="sr-only">Puntuación de empatía</small>
+                <label>Proceso
+                    <input type="number" id="proc" required aria-label="Porcentaje de proceso" aria-required="true" aria-describedby="descProc">
+                </label>
+                <small id="descProc" class="sr-only">Calidad de proceso CRM</small>
+                <label>Mora
+                    <input type="number" id="mora" required aria-label="Porcentaje de mora" aria-required="true" aria-describedby="descMora">
+                </label>
+                <small id="descMora" class="sr-only">Porcentaje de mora</small>
             </fieldset>
         </form>
     </aside>
@@ -75,6 +110,6 @@
         <section id="detalle"></section>
     </main>
 </div>
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>

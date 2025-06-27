@@ -1,3 +1,5 @@
+import { setupPDFGeneration } from './pdf-generator.js';
+
 let niveles;
 let metas;
 let pagos;
@@ -268,7 +270,18 @@ function initMoneyFormat() {
     });
 }
 
-document.getElementById('pdfButton').addEventListener('click', descargarPDF);
+
+function togglePDFMenu() {
+    const menu = document.getElementById('pdfMenuOptions');
+    if (!menu) return;
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+setupPDFGeneration();
+
+window.changeProfile = changeProfile;
+window.togglePDFMenu = togglePDFMenu;
+window.descargarPDF = descargarPDF;
 
 const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);

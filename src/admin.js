@@ -118,7 +118,7 @@ class AdminPanel {
     }
 
     authenticate(pin) {
-        const ADMIN_PIN = '123456';
+        const ADMIN_PIN = 'GT2520';
         if (pin === ADMIN_PIN) {
             this.isAuthenticated = true;
             this.showAdminPanel();
