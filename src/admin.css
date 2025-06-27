@@ -1,9 +1,15 @@
 :root {
-    --admin-primary: #006D77;
-    --admin-secondary: #83C5BE;
-    --admin-danger: #F44336;
-    --admin-success: #4CAF50;
-    --admin-warning: #FFA726;
+    --primary: #006D77;
+    --primary-light: #83C5BE;
+    --secondary: #EDF6F9;
+    --success: #4CAF50;
+    --warning: #FFA726;
+    --danger: #F44336;
+    --info: #2196F3;
+    --dark: #212121;
+    --gray: #757575;
+    --light-gray: #E0E0E0;
+    --background: #F5F6F8;
 }
 
 /* Login Screen */
@@ -13,7 +19,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: linear-gradient(135deg, var(--admin-secondary) 0%, var(--admin-primary) 100%);
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
 }
 
 .login-container h1 {
@@ -33,7 +39,7 @@
     text-align: center;
     padding: 15px;
     width: 200px;
-    border: 2px solid #ddd;
+    border: 2px solid var(--light-gray);
     border-radius: 8px;
     margin-bottom: 20px;
 }
@@ -41,11 +47,11 @@
 /* Admin Panel */
 .admin-panel {
     min-height: 100vh;
-    background: #f5f6f8;
+    background: var(--background);
 }
 
 .admin-header {
-    background: var(--admin-primary);
+    background: var(--primary);
     color: white;
     padding: 20px;
     display: flex;
@@ -68,21 +74,21 @@
 }
 
 .btn-save {
-    background: var(--admin-success);
+    background: var(--success);
     color: white;
 }
 
 .btn-save:hover {
-    background: #45a049;
+    background: var(--success);
 }
 
 .btn-export, .btn-import {
-    background: var(--admin-secondary);
+    background: var(--primary-light);
     color: white;
 }
 
 .btn-logout {
-    background: var(--admin-danger);
+    background: var(--danger);
     color: white;
 }
 
@@ -91,7 +97,7 @@
     background: white;
     padding: 0;
     display: flex;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid var(--light-gray);
 }
 
 .profile-tab {
@@ -106,11 +112,11 @@
 }
 
 .profile-tab:hover {
-    background: #f0f0f0;
+    background: var(--secondary);
 }
 
 .profile-tab.active {
-    background: var(--admin-primary);
+    background: var(--primary);
     color: white;
 }
 
@@ -128,10 +134,10 @@
 }
 
 .config-section h2 {
-    color: var(--admin-primary);
+    color: var(--primary);
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid var(--light-gray);
 }
 
 /* Tables */
@@ -141,7 +147,7 @@
 }
 
 .config-table th {
-    background: var(--admin-secondary);
+    background: var(--primary-light);
     color: white;
     padding: 12px;
     text-align: left;
@@ -149,19 +155,19 @@
 
 .config-table td {
     padding: 8px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--light-gray);
 }
 
 .table-input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--light-gray);
     border-radius: 4px;
     font-size: 14px;
 }
 
 .table-input:focus {
-    border-color: var(--admin-primary);
+    border-color: var(--primary);
     outline: none;
 }
 
@@ -178,13 +184,13 @@
 }
 
 .multiplicador-config {
-    background: #f8f9fa;
+    background: var(--secondary);
     padding: 15px;
     border-radius: 8px;
 }
 
 .multiplicador-config h4 {
-    color: var(--admin-primary);
+    color: var(--primary);
     margin-bottom: 10px;
 }
 
@@ -196,7 +202,7 @@
 .mult-input {
     width: 60px;
     padding: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--light-gray);
     border-radius: 4px;
     text-align: center;
 }
@@ -207,7 +213,7 @@
     padding: 20px;
     margin: 20px;
     border-radius: 8px;
-    border: 2px solid var(--admin-warning);
+    border: 2px solid var(--warning);
 }
 
 .changes-list {
@@ -218,7 +224,7 @@
 .change-item {
     padding: 8px;
     margin: 5px 0;
-    background: #fff8e1;
+    background: var(--warning);
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
@@ -226,7 +232,7 @@
 
 .change-field {
     font-weight: bold;
-    color: var(--admin-primary);
+    color: var(--primary);
 }
 
 /* History Section */
@@ -244,7 +250,7 @@
 
 .btn-detail {
     padding: 5px 10px;
-    background: var(--admin-secondary);
+    background: var(--primary-light);
     color: white;
     border: none;
     border-radius: 4px;
