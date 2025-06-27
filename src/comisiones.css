@@ -351,3 +351,69 @@ button:active::after {
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
+/* Gamification */
+#gamification {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+#logrosList {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+#logrosList li {
+    background: var(--light-gray);
+    color: var(--dark);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+#logrosList li.unlocked {
+    background: var(--success);
+    color: #fff;
+    opacity: 1;
+}
+
+#logrosList li.animate {
+    transform: scale(1.2);
+}
+
+.proyeccion {
+    margin-top: 1rem;
+}
+
+.progress-ring {
+    position: relative;
+    width: 120px;
+    margin: 1rem auto;
+}
+
+.progress-ring svg {
+    transform: rotate(-90deg);
+}
+
+#progressRingText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+}
+
+#ranking {
+    margin-top: 1rem;
+}
+
+#motivationalQuote {
+    margin-top: 1rem;
+    font-style: italic;
+}
+
