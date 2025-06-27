@@ -37,7 +37,7 @@ open index.html
 ## **👤 Panel Admin**
 
 * URL: `/admin.html`  
-* PIN: `GT2520`
+* PIN: `123456`
 
 ## **📊 Perfiles Disponibles**
 
