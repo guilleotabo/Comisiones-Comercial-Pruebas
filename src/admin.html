@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Sistema de Comisiones</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div id="adminApp">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-container">
+            <h1>🔐 Administración del Sistema</h1>
+            <form id="loginForm">
+                <input type="password" id="adminPin" placeholder="PIN de 6 dígitos" maxlength="6">
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+
+        <!-- Admin Panel (oculto inicialmente) -->
+        <div id="adminPanel" class="admin-panel" style="display: none;">
+            <!-- Se carga dinámicamente -->
+        </div>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
