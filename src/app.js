@@ -71,7 +71,7 @@ let currentProfile = 'agil_1';
 function applyProfile(id) {
     const p = profiles[id] || profiles.agil_1;
     currentProfile = p.id;
-    localStorage.setItem('selectedProfile', currentProfile);
+    localStorage.setItem('currentProfile', currentProfile);
 
     niveles = cloneConfig(p.config.niveles);
     metas = cloneConfig(p.config.metas);
@@ -88,8 +88,15 @@ function applyProfile(id) {
         resetProgressBars();
         initProgressBars();
     }
+}
 
+function updateCalculations() {
     calcular();
+}
+
+function changeProfile(profileId) {
+    applyProfile(profileId);
+    updateCalculations();
 }
 
 function updateProgress(id, nivel) {
@@ -220,9 +227,6 @@ document.querySelectorAll('#datosForm input, #datosForm select').forEach(el => {
 
 document.getElementById('pdfButton').addEventListener('click', descargarPDF);
 
-const savedProfile = localStorage.getItem('selectedProfile') || 'agil_1';
+const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
-
-document.getElementById('profileSelect').addEventListener('change', e => {
-    applyProfile(e.target.value);
-});
+updateCalculations();
