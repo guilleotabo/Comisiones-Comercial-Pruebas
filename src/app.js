@@ -126,6 +126,42 @@ function initGaugeCharts() {
     gaugeCharts.mora = createGauge('gaugeMora');
 }
 
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) toggle.checked = theme === 'dark';
+}
+
+function toggleTheme() {
+    const current = localStorage.getItem('theme') === 'dark' ? 'dark' : 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+function initTheme() {
+    const stored = localStorage.getItem('theme') || 'light';
+    applyTheme(stored);
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) toggle.addEventListener('change', toggleTheme);
+}
+
+function initTour() {
+    const hide = localStorage.getItem('hideTour');
+    if (!hide) {
+        const overlay = document.getElementById('tourOverlay');
+        if (overlay) overlay.classList.remove('hidden');
+    }
+}
+
+function closeTour() {
+    const dont = document.getElementById('dontShowTour');
+    if (dont && dont.checked) {
+        localStorage.setItem('hideTour', '1');
+    }
+    const overlay = document.getElementById('tourOverlay');
+    if (overlay) overlay.classList.add('hidden');
+}
+
 let profiles = loadStoredProfiles() || cloneConfig(defaultProfiles);
 
 let currentProfile = 'agil_1';
@@ -253,6 +289,8 @@ window.calcular = calcular;
 window.changeProfile = changeProfile;
 window.togglePDFMenu = togglePDFMenu;
 window.descargarPDF = descargarPDF;
+window.toggleTheme = toggleTheme;
+window.closeTour = closeTour;
 
 const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
@@ -260,4 +298,6 @@ initMoneyFormat();
 initChart();
 initBarChart();
 initGaugeCharts();
+initTheme();
+initTour();
 updateCalculations();
