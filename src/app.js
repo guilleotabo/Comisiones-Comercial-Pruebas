@@ -120,11 +120,14 @@ function updateProgress(id, nivel) {
     if (!bar) return;
     const segs = bar.children;
     for (let i = 0; i < segs.length; i++) {
-        segs[i].classList.remove('reached', 'current');
-        if (nivel > i) segs[i].classList.add('reached');
-    }
-    if (nivel >= 0 && nivel < segs.length) {
-        segs[nivel].classList.add('current');
+        segs[i].classList.remove('reached', 'current', 'unreached');
+        if (i < nivel) {
+            segs[i].classList.add('reached');
+        } else if (i === nivel) {
+            segs[i].classList.add('current');
+        } else {
+            segs[i].classList.add('unreached');
+        }
     }
 }
 
@@ -148,7 +151,16 @@ function initProgressBars() {
         const bar = document.getElementById(c.bar);
         if (!bar) return;
         Array.from(bar.children).forEach((seg, i) => {
-            seg.addEventListener('click', () => {
+            seg.addEventListener('click', (e) => {
+                const ripple = document.createElement('span');
+                const size = Math.max(seg.clientWidth, seg.clientHeight);
+                const rect = seg.getBoundingClientRect();
+                ripple.className = 'ripple';
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                seg.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove());
                 document.getElementById(c.input).value = c.metas[i];
                 calcular();
             });
