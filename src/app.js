@@ -6,6 +6,20 @@ let multEmpatia;
 let multProceso;
 let multMora;
 
+const STORAGE_KEY = 'commission_profiles';
+
+function loadStoredProfiles() {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return null;
+        const data = JSON.parse(stored);
+        return data.profiles || null;
+    } catch (e) {
+        console.error('Error cargando perfiles almacenados:', e);
+        return null;
+    }
+}
+
 const baseConfig = {
     niveles: ['Capilla', 'Junior', 'Senior A', 'Senior B', 'Máster', 'Genio'],
     metas: {
@@ -59,12 +73,14 @@ function cloneConfig(cfg) {
     return JSON.parse(JSON.stringify(cfg));
 }
 
-const profiles = {
+const defaultProfiles = {
     agil_1: { id: 'agil_1', name: 'Ágil 1', config: cloneConfig(baseConfig) },
     agil_2: { id: 'agil_2', name: 'Ágil 2', config: cloneConfig(baseConfig) },
     empresarial_1: { id: 'empresarial_1', name: 'Empresarial 1', config: cloneConfig(baseConfig) },
     empresarial_2: { id: 'empresarial_2', name: 'Empresarial 2', config: cloneConfig(baseConfig) }
 };
+
+let profiles = loadStoredProfiles() || cloneConfig(defaultProfiles);
 
 let currentProfile = 'agil_1';
 
