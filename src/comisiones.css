@@ -1,3 +1,17 @@
+:root {
+    --primary: #006D77;
+    --primary-light: #83C5BE;
+    --secondary: #EDF6F9;
+    --success: #4CAF50;
+    --warning: #FFA726;
+    --danger: #F44336;
+    --info: #2196F3;
+    --dark: #212121;
+    --gray: #757575;
+    --light-gray: #E0E0E0;
+    --background: #F5F6F8;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -10,7 +24,7 @@ body {
 #sidebar {
     width: 320px;
     padding: 20px;
-    background: #f4f4f4;
+    background: var(--secondary);
     box-sizing: border-box;
 }
 #sidebar header {
@@ -38,10 +52,10 @@ input, select {
     box-sizing: border-box;
 }
 input:required:invalid {
-    border: 1px solid red;
+    border: 1px solid var(--danger);
 }
 input:not(:placeholder-shown) {
-    border: 1px solid green;
+    border: 1px solid var(--success);
 }
 #comisionTotal {
     font-size: 24px;
@@ -54,7 +68,7 @@ input:not(:placeholder-shown) {
 }
 .progress div {
     flex: 1;
-    background: #ddd;
+    background: var(--light-gray);
     margin-right: 2px;
     cursor: pointer;
 }
@@ -62,8 +76,8 @@ input:not(:placeholder-shown) {
     margin-right: 0;
 }
 .progress div.reached {
-    background: #4caf50;
+    background: var(--success);
 }
 .progress div.current {
-    background: #003f7f;
+    background: var(--primary);
 }

@@ -1,9 +1,15 @@
 :root {
-    --admin-primary: #006D77;
-    --admin-secondary: #83C5BE;
-    --admin-danger: #F44336;
-    --admin-success: #4CAF50;
-    --admin-warning: #FFA726;
+    --primary: #006D77;
+    --primary-light: #83C5BE;
+    --secondary: #EDF6F9;
+    --danger: #F44336;
+    --success: #4CAF50;
+    --warning: #FFA726;
+    --info: #2196F3;
+    --dark: #212121;
+    --gray: #757575;
+    --light-gray: #E0E0E0;
+    --background: #F5F6F8;
 }
 
 /* Login Screen */
@@ -13,7 +19,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: linear-gradient(135deg, var(--admin-secondary) 0%, var(--admin-primary) 100%);
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
 }
 
 .login-container h1 {
@@ -41,11 +47,11 @@
 /* Admin Panel */
 .admin-panel {
     min-height: 100vh;
-    background: #f5f6f8;
+    background: var(--background);
 }
 
 .admin-header {
-    background: var(--admin-primary);
+    background: var(--primary);
     color: white;
     padding: 20px;
     display: flex;
@@ -68,7 +74,7 @@
 }
 
 .btn-save {
-    background: var(--admin-success);
+    background: var(--success);
     color: white;
 }
 
@@ -77,12 +83,12 @@
 }
 
 .btn-export, .btn-import {
-    background: var(--admin-secondary);
+    background: var(--primary-light);
     color: white;
 }
 
 .btn-logout {
-    background: var(--admin-danger);
+    background: var(--danger);
     color: white;
 }
 
@@ -110,7 +116,7 @@
 }
 
 .profile-tab.active {
-    background: var(--admin-primary);
+    background: var(--primary);
     color: white;
 }
 
@@ -128,7 +134,7 @@
 }
 
 .config-section h2 {
-    color: var(--admin-primary);
+    color: var(--primary);
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 2px solid #eee;
@@ -141,7 +147,7 @@
 }
 
 .config-table th {
-    background: var(--admin-secondary);
+    background: var(--primary-light);
     color: white;
     padding: 12px;
     text-align: left;
@@ -161,7 +167,7 @@
 }
 
 .table-input:focus {
-    border-color: var(--admin-primary);
+    border-color: var(--primary);
     outline: none;
 }
 
@@ -184,7 +190,7 @@
 }
 
 .multiplicador-config h4 {
-    color: var(--admin-primary);
+    color: var(--primary);
     margin-bottom: 10px;
 }
 
@@ -207,7 +213,7 @@
     padding: 20px;
     margin: 20px;
     border-radius: 8px;
-    border: 2px solid var(--admin-warning);
+    border: 2px solid var(--warning);
 }
 
 .changes-list {
@@ -226,7 +232,7 @@
 
 .change-field {
     font-weight: bold;
-    color: var(--admin-primary);
+    color: var(--primary);
 }
 
 /* History Section */
@@ -244,7 +250,7 @@
 
 .btn-detail {
     padding: 5px 10px;
-    background: var(--admin-secondary);
+    background: var(--primary-light);
     color: white;
     border: none;
     border-radius: 4px;
