@@ -148,6 +148,59 @@
             <canvas id="gaugeProc" width="120" height="60" aria-label="Proc"></canvas>
             <canvas id="gaugeMora" width="120" height="60" aria-label="Mora"></canvas>
         </div>
+        <section id="dashboardHeader" class="dash-card">
+            <div class="header-main">
+                <h2>Comisión Actual</h2>
+                <div id="dashComisionActual" class="counter">0</div>
+            </div>
+            <div class="header-progress">
+                <canvas id="dashProgress" width="120" height="120" aria-label="Meta mensual"></canvas>
+                <div class="potencial">
+                    Potencial máximo <span id="dashPotencialValor">0</span>
+                </div>
+            </div>
+        </section>
+        <section id="comparativoInteractive" class="dash-card">
+            <canvas id="chartComparativoNew" width="400" height="220" aria-label="Comparativo"></canvas>
+        </section>
+        <section id="simulador" class="dash-card">
+            <h3>¿Qué pasaría si...?</h3>
+            <div class="slider-group">
+                <label>Monto Interno <input type="range" id="simInterno" min="-10" max="10" value="0"></label>
+                <span id="simInternoVal">0%</span>
+            </div>
+            <div class="slider-group">
+                <label>Monto Externo <input type="range" id="simExterno" min="-10" max="10" value="0"></label>
+                <span id="simExternoVal">0%</span>
+            </div>
+            <div class="slider-group">
+                <label>Multiplicadores <input type="range" id="simMult" min="-10" max="10" value="0"></label>
+                <span id="simMultVal">0%</span>
+            </div>
+            <p>Comisión simulada: <span id="simComision">0</span></p>
+            <button id="simAplicar" type="button">Aplicar estos valores</button>
+        </section>
+        <section id="tablaLiquidacion" class="dash-card">
+            <table>
+                <thead>
+                    <tr><th>Concepto</th><th>Monto</th></tr>
+                </thead>
+                <tbody id="tablaDetalle"></tbody>
+                <tfoot>
+                    <tr class="subtotal"><td>Subtotal</td><td id="tablaSubtotal">0</td></tr>
+                    <tr class="multiplicador"><td>Multiplicador</td><td id="tablaMulti">0</td></tr>
+                    <tr class="total"><td>Total</td><td id="tablaTotal">0</td></tr>
+                </tfoot>
+            </table>
+        </section>
+        <section id="indicadoresPotencial" class="dash-card grid">
+            <div class="pot-card" id="potNivel">Si alcanzas Senior B ganarías +0</div>
+            <div class="pot-card" id="potConversion">Mejorando conversión a 10% → +0</div>
+            <div class="pot-card" id="potDesembolsos">Con 2 desembolsos más → +0</div>
+        </section>
+        <section id="velocimetro" class="dash-card">
+            <canvas id="gaugeGeneral" width="240" height="120" aria-label="Performance"></canvas>
+        </section>
         <section id="detalle"></section>
         <section id="gamification">
             <h3>Logros</h3>

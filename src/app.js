@@ -18,6 +18,9 @@ let multMora;
 let donutChart;
 let barChart;
 let gaugeCharts = {};
+let progressChart;
+let comparativoNewChart;
+let generalGauge;
 
 function animateValue(el, start, end) {
     const duration = 500;
@@ -128,6 +131,134 @@ function initGaugeCharts() {
     gaugeCharts.mora = createGauge('gaugeMora');
 }
 
+function initDashboard() {
+    const pctx = document.getElementById('dashProgress');
+    if (pctx) {
+        progressChart = new Chart(pctx, {
+            type: 'doughnut',
+            data: { datasets:[{ data:[0,100], backgroundColor:['#4CAF50','#E0E0E0'], borderWidth:0 }] },
+            options:{ responsive:false, cutout:'75%', plugins:{legend:{display:false}} }
+        });
+    }
+
+    const cctx = document.getElementById('chartComparativoNew');
+    if (cctx) {
+        comparativoNewChart = new Chart(cctx, {
+            type: 'bar',
+            data:{
+                labels:['Interno','Externo','Recuperado','Cantidad'],
+                datasets:[
+                    {label:'Actual', data:[0,0,0,0], backgroundColor:'#006D77'},
+                    {label:'Meta', data:[0,0,0,0], backgroundColor:'#83C5BE'},
+                    {label:'Potencial', data:[0,0,0,0], backgroundColor:'#4CAF50'}
+                ]
+            },
+            options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
+        });
+    }
+
+    generalGauge = createGauge('gaugeGeneral');
+
+    ['simInterno','simExterno','simMult'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateSimulador);
+    });
+    const aplicar = document.getElementById('simAplicar');
+    if (aplicar) aplicar.addEventListener('click', aplicarSimulador);
+}
+
+function updateDashboard(resultado, datos) {
+    if (progressChart) {
+        const meta = metas.montoInterno[metas.montoInterno.length-1];
+        const pct = Math.min(100, (resultado.total / (meta || 1)) * 100);
+        progressChart.data.datasets[0].data[0] = pct;
+        progressChart.data.datasets[0].data[1] = 100 - pct;
+        progressChart.update();
+    }
+
+    if (comparativoNewChart) {
+        const metasArr = [
+            metas.montoInterno[metas.montoInterno.length-1],
+            metas.montoExterno[metas.montoExterno.length-1],
+            metas.montoRecuperado[metas.montoRecuperado.length-1],
+            metas.cantidad[metas.cantidad.length-1]
+        ];
+        const actuales = [datos.montoInterno, datos.montoExterno, datos.montoRecuperado, datos.cantidad];
+        const potencial = actuales.map((v,i)=>Math.min(metasArr[i], v * 1.1));
+        comparativoNewChart.data.datasets[0].data = actuales;
+        comparativoNewChart.data.datasets[1].data = metasArr;
+        comparativoNewChart.data.datasets[2].data = potencial;
+        comparativoNewChart.update();
+    }
+
+    if (generalGauge) {
+        const pct = Math.min(100, resultado.multiplicador * 100);
+        generalGauge.options.plugins.needle.value = pct;
+        generalGauge.update();
+    }
+
+    const detalleBody = document.getElementById('tablaDetalle');
+    if (detalleBody) {
+        detalleBody.innerHTML = '';
+        Object.entries(resultado.detalle).forEach(([k,v])=>{
+            const tr = document.createElement('tr');
+            const c1 = document.createElement('td');
+            c1.textContent = k.charAt(0).toUpperCase()+k.slice(1);
+            const c2 = document.createElement('td');
+            c2.textContent = formatMoney(v);
+            tr.appendChild(c1); tr.appendChild(c2);
+            detalleBody.appendChild(tr);
+        });
+        document.getElementById('tablaSubtotal').textContent = formatMoney(resultado.subtotal);
+        document.getElementById('tablaMulti').textContent = resultado.multiplicador.toFixed(2);
+        document.getElementById('tablaTotal').textContent = formatMoney(resultado.total);
+    }
+
+    document.getElementById('dashComisionActual')?.textContent = formatMoney(resultado.total);
+    document.getElementById('dashPotencialValor')?.textContent = formatMoney(resultado.total * 1.1);
+    document.getElementById('potNivel')?.textContent = `Si alcanzas Senior B ganarías +${formatMoney(resultado.total*0.1)}`;
+    document.getElementById('potConversion')?.textContent = `Mejorando conversión a 10% → +${formatMoney(resultado.total*0.05)}`;
+    document.getElementById('potDesembolsos')?.textContent = `Con 2 desembolsos más → +${formatMoney(resultado.total*0.03)}`;
+}
+
+function updateSimulador() {
+    const base = getDatosFormulario();
+    const deltaI = Number(document.getElementById('simInterno').value) / 100;
+    const deltaE = Number(document.getElementById('simExterno').value) / 100;
+    const deltaM = Number(document.getElementById('simMult').value) / 100;
+
+    document.getElementById('simInternoVal').textContent = `${Math.round(deltaI*100)}%`;
+    document.getElementById('simExternoVal').textContent = `${Math.round(deltaE*100)}%`;
+    document.getElementById('simMultVal').textContent = `${Math.round(deltaM*100)}%`;
+
+    const simDatos = { ...base };
+    simDatos.montoInterno += simDatos.montoInterno * deltaI;
+    simDatos.montoExterno += simDatos.montoExterno * deltaE;
+    simDatos.conversion += simDatos.conversion * deltaM;
+    simDatos.empatia += simDatos.empatia * deltaM;
+    simDatos.proceso += simDatos.proceso * deltaM;
+    simDatos.mora = Math.max(0, simDatos.mora - simDatos.mora * deltaM);
+
+    const cfg = { metas, pagos, multConversion, multEmpatia, multProceso, multMora };
+    const r = calcularComisionTotal(simDatos, cfg);
+    document.getElementById('simComision').textContent = formatMoney(r.total);
+}
+
+function aplicarSimulador() {
+    const deltaI = Number(document.getElementById('simInterno').value) / 100;
+    const deltaE = Number(document.getElementById('simExterno').value) / 100;
+    const deltaM = Number(document.getElementById('simMult').value) / 100;
+
+    const datos = getDatosFormulario();
+    document.getElementById('montoInterno').value = Math.round(datos.montoInterno * (1 + deltaI));
+    document.getElementById('montoExterno').value = Math.round(datos.montoExterno * (1 + deltaE));
+    document.getElementById('conv').value = Math.round(datos.conversion * (1 + deltaM));
+    document.getElementById('emp').value = Math.round(datos.empatia * (1 + deltaM));
+    document.getElementById('proc').value = Math.round(datos.proceso * (1 + deltaM));
+    document.getElementById('mora').value = Math.max(0, Math.round(datos.mora * (1 - deltaM)));
+    calcular();
+}
+
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -199,9 +330,8 @@ function changeProfile(profileId) {
     updateCalculations();
 }
 
-
-function calcular() {
-    const datos = {
+function getDatosFormulario() {
+    return {
         montoInterno: parseMoney(document.getElementById('montoInterno').value) || 0,
         montoExterno: parseMoney(document.getElementById('montoExterno').value) || 0,
         montoRecuperado: parseMoney(document.getElementById('montoRecuperado').value) || 0,
@@ -214,6 +344,11 @@ function calcular() {
         nivelAnterior: Number(document.getElementById('nivelAnterior').value),
         nivelEquipo: Number(document.getElementById('nivelEquipo').value)
     };
+}
+
+
+function calcular() {
+    const datos = getDatosFormulario();
 
     const cfg = { metas, pagos, multConversion, multEmpatia, multProceso, multMora };
     const resultado = calcularComisionTotal(datos, cfg);
@@ -269,6 +404,8 @@ function calcular() {
         <p>Subtotal: ${formatMoney(resultado.subtotal)}</p>
         <p>Multiplicador: ${resultado.multiplicador.toFixed(2)}</p>
     `;
+
+    updateDashboard(resultado, datos);
 
     checkAchievements(resultado);
 }
@@ -395,6 +532,7 @@ initMoneyFormat();
 initChart();
 initBarChart();
 initGaugeCharts();
+initDashboard();
 initTheme();
 initTour();
 initGamification();
