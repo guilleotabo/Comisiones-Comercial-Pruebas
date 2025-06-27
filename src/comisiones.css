@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+#container {
+    display: flex;
+    width: 100%;
+}
+#sidebar {
+    width: 320px;
+    padding: 20px;
+    background: #f4f4f4;
+    box-sizing: border-box;
+}
+#sidebar header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+#sidebar h1 {
+    font-size: 18px;
+    margin: 0;
+}
+#result {
+    flex: 1;
+    padding: 20px;
+}
+input, select {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+input:required:invalid {
+    border: 1px solid red;
+}
+input:not(:placeholder-shown) {
+    border: 1px solid green;
+}
+#comisionTotal {
+    font-size: 24px;
+    font-weight: bold;
+}
+.progress {
+    display: flex;
+    height: 12px;
+    margin-bottom: 5px;
+}
+.progress div {
+    flex: 1;
+    background: #ddd;
+    margin-right: 2px;
+}
+.progress div.reached {
+    background: #4caf50;
+}
+.progress div.current {
+    background: #003f7f;
+}
