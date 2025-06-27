@@ -14,6 +14,8 @@ let multProceso;
 let multMora;
 
 let donutChart;
+let barChart;
+let gaugeCharts = {};
 
 function animateValue(el, start, end) {
     const duration = 500;
@@ -41,6 +43,87 @@ function initChart() {
         },
         options: { plugins: { legend: { display: false } } }
     });
+}
+
+function initBarChart() {
+    const ctx = document.getElementById('chartComparativo');
+    if (!ctx) return;
+    barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Interno','Externo','Recuperado','Cantidad'],
+            datasets: [{
+                label: '% Cumplimiento',
+                data: [0,0,0,0],
+                backgroundColor: ['#F44336','#F44336','#F44336','#F44336']
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, max: 100, ticks: { callback:v=>v+'%' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+const needlePlugin = {
+    id: 'needle',
+    afterDatasetDraw(chart, args, options) {
+        const { ctx } = chart;
+        const val = options.value || 0;
+        const angle = chart.options.rotation + (chart.options.circumference * (val / 100));
+        const cx = chart.getDatasetMeta(0).data[0].x;
+        const cy = chart.getDatasetMeta(0).data[0].y;
+        const r = chart.getDatasetMeta(0).data[0].outerRadius;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(0,0);
+        ctx.lineTo(r,0);
+        ctx.strokeStyle = options.color || '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = options.color || '#000';
+        ctx.fillText(val.toFixed(0), cx, cy + 15);
+    }
+};
+
+function createGauge(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    return new Chart(el, {
+        type: 'doughnut',
+        data: {
+            labels: ['Bajo','Medio','Alto'],
+            datasets:[{
+                data:[50,30,20],
+                backgroundColor:['#F44336','#FFA726','#4CAF50'],
+                borderWidth:0
+            }]
+        },
+        options:{
+            responsive:true,
+            circumference:180,
+            rotation:-90,
+            cutout:'70%',
+            plugins:{ legend:{ display:false }, needle:{ value:0 } }
+        },
+        plugins:[needlePlugin]
+    });
+}
+
+function initGaugeCharts() {
+    gaugeCharts.conv = createGauge('gaugeConv');
+    gaugeCharts.emp = createGauge('gaugeEmp');
+    gaugeCharts.proc = createGauge('gaugeProc');
+    gaugeCharts.mora = createGauge('gaugeMora');
 }
 
 let profiles = loadStoredProfiles() || cloneConfig(defaultProfiles);
@@ -122,6 +205,27 @@ function calcular() {
         donutChart.update();
     }
 
+    if (barChart) {
+        const progress = [
+            datos.montoInterno / metas.montoInterno[metas.montoInterno.length-1] * 100,
+            datos.montoExterno / metas.montoExterno[metas.montoExterno.length-1] * 100,
+            datos.montoRecuperado / metas.montoRecuperado[metas.montoRecuperado.length-1] * 100,
+            datos.cantidad / metas.cantidad[metas.cantidad.length-1] * 100
+        ].map(v => Math.min(v, 100));
+        barChart.data.datasets[0].data = progress;
+        barChart.data.datasets[0].backgroundColor = progress.map(v => v >= 80 ? '#4CAF50' : v >= 50 ? '#FFA726' : '#F44336');
+        barChart.update();
+    }
+
+    const map = { conv: 'conversion', emp: 'empatia', proc: 'proceso', mora: 'mora' };
+    Object.entries(gaugeCharts).forEach(([key, chart]) => {
+        if (!chart) return;
+        let val = datos[map[key]] || 0;
+        if (key === 'mora') val = Math.max(0, 100 - val);
+        chart.options.plugins.needle.value = val;
+        chart.update();
+    });
+
     document.getElementById('detalle').innerHTML = `
         <p>Nivel Carrera: ${resultado.nivelCarreraFinal >= 0 ? niveles[resultado.nivelCarreraFinal] : 'Sin nivel'}</p>
         <p>Subtotal: ${resultado.subtotal.toLocaleString('es-ES')}</p>
@@ -154,4 +258,6 @@ const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
 initMoneyFormat();
 initChart();
+initBarChart();
+initGaugeCharts();
 updateCalculations();
