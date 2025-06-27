@@ -162,7 +162,7 @@ CREAR ARCHIVOS NUEVOS:
 - admin.css (estilos sección 20.3)
 
 FUNCIONALIDADES:
-- Login con PIN: 123456
+- Login con PIN: GT2520
 - 4 tabs (uno por perfil)
 - Tablas editables para:
   * Base fija
@@ -180,8 +180,8 @@ IMPORTANTE:
 ### **VALIDACIÓN FASE 3:**
 
 * \[ \] Puedo acceder a /admin.html  
-* \[ \] PIN incorrecto (111111) → no entra  
-* \[ \] PIN correcto (123456) → entra  
+* \[ \] PIN incorrecto (111111) → no entra
+* \[ \] PIN correcto (GT2520) → entra
 * \[ \] Veo 4 pestañas de perfiles  
 * \[ \] **TEST CAMBIO**:  
   * Cambiar base de Ágil 1 a 3,500,000  
