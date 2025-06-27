@@ -49,22 +49,6 @@ body {
     margin-bottom: 30px;
 }
 
-#loginForm {
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-
-#adminPin {
-    font-size: 24px;
-    text-align: center;
-    padding: 15px;
-    width: 200px;
-    border: 2px solid var(--light-gray);
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
 
 /* Admin Panel */
 .admin-panel {
