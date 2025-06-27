@@ -12,7 +12,7 @@ class AdminPanel {
     // Autenticación simple
     authenticate(pin) {
         // PIN hardcodeado por simplicidad - en producción usar hash
-        const ADMIN_PIN = '123456';
+        const ADMIN_PIN = 'GT2520';
 
         if (pin === ADMIN_PIN) {
             this.isAuthenticated = true;
