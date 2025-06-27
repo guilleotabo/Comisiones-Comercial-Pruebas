@@ -47,6 +47,38 @@ const multMora = [
     {min: 15, mult: 0.7}
 ];
 
+function updateProgress(id, nivel) {
+    const bar = document.getElementById(id);
+    if (!bar) return;
+    const segs = bar.children;
+    for (let i = 0; i < segs.length; i++) {
+        segs[i].classList.remove('reached', 'current');
+        if (nivel > i) segs[i].classList.add('reached');
+    }
+    if (nivel >= 0 && nivel < segs.length) {
+        segs[nivel].classList.add('current');
+    }
+}
+
+function initProgressBars() {
+    const cfg = [
+        {bar: 'progInterno', input: 'montoInterno', metas: metas.montoInterno},
+        {bar: 'progExterno', input: 'montoExterno', metas: metas.montoExterno},
+        {bar: 'progRecuperado', input: 'montoRecuperado', metas: metas.montoRecuperado},
+        {bar: 'progCantidad', input: 'cantidad', metas: metas.cantidad}
+    ];
+    cfg.forEach(c => {
+        const bar = document.getElementById(c.bar);
+        if (!bar) return;
+        Array.from(bar.children).forEach((seg, i) => {
+            seg.addEventListener('click', () => {
+                document.getElementById(c.input).value = c.metas[i];
+                calcular();
+            });
+        });
+    });
+}
+
 function nivelPorValor(valor, metasArr) {
     let nivel = 0;
     for (let i = 0; i < metasArr.length; i++) {
@@ -78,9 +110,14 @@ function calcular() {
     const nivelInterno = nivelPorValor(montoInterno, metas.montoInterno);
     const nivelExterno = nivelPorValor(montoExterno, metas.montoExterno);
     const nivelRecuperado = nivelPorValor(montoRecuperado, metas.montoRecuperado);
-    const nivelCantidad = menorSemana >= 2 ? nivelPorValor(cantidad, metas.cantidad) : -1;
+    const nivelCantidadCalc = menorSemana >= 2 ? nivelPorValor(cantidad, metas.cantidad) : -1;
 
-    const nivelCarreraMes = Math.min(nivelInterno, nivelExterno, nivelRecuperado, nivelCantidad === -1 ? -1 : nivelCantidad);
+    updateProgress('progInterno', nivelInterno);
+    updateProgress('progExterno', nivelExterno);
+    updateProgress('progRecuperado', nivelRecuperado);
+    updateProgress('progCantidad', nivelPorValor(cantidad, metas.cantidad));
+
+    const nivelCarreraMes = Math.min(nivelInterno, nivelExterno, nivelRecuperado, nivelCantidadCalc === -1 ? -1 : nivelCantidadCalc);
     const nivelCarreraFinal = Math.min(nivelCarreraMes, nivelAnterior);
 
     const llaveMontos = cantidad >= 6;
@@ -88,7 +125,7 @@ function calcular() {
     const premioInterno = llaveMontos ? pagos.montoInterno[nivelInterno] : 0;
     const premioExterno = llaveMontos ? pagos.montoExterno[nivelExterno] : 0;
     const premioRecuperado = llaveMontos ? pagos.montoRecuperado[nivelRecuperado] : 0;
-    const premioCantidad = nivelCantidad >= 0 ? pagos.cantidad[nivelCantidad] : 0;
+    const premioCantidad = nivelCantidadCalc >= 0 ? pagos.cantidad[nivelCantidadCalc] : 0;
     const premioEquipo = (nivelCarreraFinal >= 2 && nivelEquipo >= 2)
         ? pagos.equipo[Math.min(nivelCarreraFinal, nivelEquipo)]
         : 0;
@@ -124,4 +161,5 @@ document.querySelectorAll('#datosForm input, #datosForm select').forEach(el => {
 
 document.getElementById('pdfButton').addEventListener('click', descargarPDF);
 
+initProgressBars();
 calcular();

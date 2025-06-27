@@ -52,6 +52,10 @@ input:not(:placeholder-shown) {
     flex: 1;
     background: #ddd;
     margin-right: 2px;
+    cursor: pointer;
+}
+.progress div:last-child {
+    margin-right: 0;
 }
 .progress div.reached {
     background: #4caf50;
