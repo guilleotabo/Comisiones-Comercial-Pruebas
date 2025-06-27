@@ -1386,7 +1386,7 @@ Crear archivo `tests/manual/checklist.md`:
 - [ ] Ir a /admin.html
 - [ ] Ingresar PIN incorrecto (111111)
 - [ ] ¿Muestra error?
-- [ ] Ingresar PIN correcto (123456)
+- [ ] Ingresar PIN correcto (GT2520)
 - [ ] ¿Entra al panel?
 
 ### 7. Modificar Valores
@@ -1562,7 +1562,7 @@ Crear archivo `tests/casos-de-prueba.xlsx` con estas hojas:
 
 | ID | Descripción | Pasos | Resultado Esperado | ¿Pasó? |
 | ----- | ----- | ----- | ----- | ----- |
-| A01 | Login correcto | PIN: 123456 | Entra al panel | ☐ |
+| A01 | Login correcto | PIN: GT2520 | Entra al panel | ☐ |
 | A02 | Cambiar base | 1\. Cambiar a 4M 2\. Guardar | Se refleja en app | ☐ |
 
 ### **16.5 Reporte de Bugs**
@@ -2137,7 +2137,7 @@ class AdminPanel {
     // Autenticación simple
     authenticate(pin) {
         // PIN hardcodeado por simplicidad - en producción usar hash
-        const ADMIN_PIN = '123456';
+        const ADMIN_PIN = 'GT2520';
         
         if (pin === ADMIN_PIN) {
             this.isAuthenticated = true;
