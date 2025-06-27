@@ -3,6 +3,12 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
 }
+
+/* Focus outline for keyboard navigation */
+:focus-visible {
+    outline: 3px solid #006D77;
+    outline-offset: 2px;
+}
 #container {
     display: flex;
     width: 100%;

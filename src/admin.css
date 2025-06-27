@@ -6,6 +6,12 @@
     --admin-warning: #FFA726;
 }
 
+/* Focus outline for keyboard navigation */
+:focus-visible {
+    outline: 3px solid #006D77;
+    outline-offset: 2px;
+}
+
 /* Login Screen */
 .login-container {
     display: flex;
