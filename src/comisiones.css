@@ -19,6 +19,10 @@ body {
     align-items: center;
     margin-bottom: 20px;
 }
+#sidebar header select {
+    width: auto;
+    margin-left: 10px;
+}
 #sidebar h1 {
     font-size: 18px;
     margin: 0;
