@@ -184,6 +184,31 @@
         <button onclick="closeTour()">Cerrar</button>
     </div>
 </div>
+
+<button id="quickSettingsBtn" class="fab" aria-label="Ajustes Rápidos">⚙️</button>
+<div id="quickSettingsPanel" class="quick-settings hidden" aria-hidden="true">
+    <div class="qs-header">
+        <h3>Ajustes Rápidos</h3>
+        <button id="closeQsBtn" type="button" aria-label="Cerrar">✖️</button>
+    </div>
+    <div class="qs-content">
+        <label for="qsProfile">Perfil</label>
+        <select id="qsProfile"></select>
+
+        <label for="qsTheme">Tema</label>
+        <select id="qsTheme">
+            <option value="light">Claro</option>
+            <option value="dark">Oscuro</option>
+        </select>
+
+        <div class="qs-actions">
+            <button id="qsExport" type="button">Exportar</button>
+            <button id="qsImport" type="button">Importar</button>
+        </div>
+
+        <ul id="qsHistory" class="qs-history"></ul>
+    </div>
+</div>
 <script type="module" src="app.js"></script>
 </body>
 </html>

@@ -417,3 +417,80 @@ button:active::after {
     font-style: italic;
 }
 
+/* Quick Settings */
+.fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.fab.rotate {
+    transform: rotate(45deg);
+}
+
+.quick-settings {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100%;
+    background: var(--secondary);
+    box-shadow: -2px 0 8px rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px);
+    transition: right 0.3s ease;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+}
+
+.quick-settings.open {
+    right: 0;
+}
+
+.quick-settings .qs-header {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.quick-settings .qs-content {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.qs-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.qs-history {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
