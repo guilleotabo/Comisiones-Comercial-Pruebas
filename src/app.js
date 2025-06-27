@@ -24,7 +24,7 @@ function animateValue(el, start, end) {
     function step(time) {
         const progress = Math.min((time - startTime) / duration, 1);
         const value = Math.floor(progress * (end - start) + start);
-        el.textContent = value.toLocaleString('es-ES');
+        el.textContent = formatMoney(value);
         if (progress < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -226,7 +226,7 @@ function calcular() {
     animateValue(totalEl, prev, resultado.total);
 
     document.getElementById('kpiNivel').innerText = resultado.nivelCarreraFinal >= 0 ? niveles[resultado.nivelCarreraFinal] : 'Sin nivel';
-    document.getElementById('kpiSubtotal').innerText = resultado.subtotal.toLocaleString('es-ES');
+    document.getElementById('kpiSubtotal').innerText = formatMoney(resultado.subtotal);
     document.getElementById('kpiMultiplicador').innerText = resultado.multiplicador.toFixed(2);
 
     if (donutChart) {
@@ -265,7 +265,7 @@ function calcular() {
 
     document.getElementById('detalle').innerHTML = `
         <p>Nivel Carrera: ${resultado.nivelCarreraFinal >= 0 ? niveles[resultado.nivelCarreraFinal] : 'Sin nivel'}</p>
-        <p>Subtotal: ${resultado.subtotal.toLocaleString('es-ES')}</p>
+        <p>Subtotal: ${formatMoney(resultado.subtotal)}</p>
         <p>Multiplicador: ${resultado.multiplicador.toFixed(2)}</p>
     `;
 

@@ -1,3 +1,5 @@
+import { formatMoney as formatGuarani } from './modules/validators.js';
+
 class ProfileStorage {
     static STORAGE_KEY = 'commission_profiles';
 
@@ -406,7 +408,7 @@ class AdminPanel {
     }
 
     formatMoney(value) {
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' Gs';
+        return formatGuarani(value) + ' Gs';
     }
 
     selectProfile(profileId) {

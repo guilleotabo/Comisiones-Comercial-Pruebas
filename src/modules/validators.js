@@ -9,5 +9,5 @@ export function parseMoney(value) {
 export function formatMoney(value) {
     const num = parseMoney(value);
     if (isNaN(num)) return '';
-    return num.toLocaleString('es-ES');
+    return num.toLocaleString('es-PY');
 }
