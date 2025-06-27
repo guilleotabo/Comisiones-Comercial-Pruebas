@@ -93,6 +93,7 @@ document.querySelectorAll('#datosForm input, #datosForm select').forEach(el => {
     el.addEventListener('input', calcular);
 });
 
+
 setupPDFGeneration();
 
 window.changeProfile = changeProfile;
