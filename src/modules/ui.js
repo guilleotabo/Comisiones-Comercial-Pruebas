@@ -36,6 +36,7 @@ export function initProgressBars(metas) {
             seg.setAttribute('tabindex', '0');
             seg.setAttribute('role', 'button');
             seg.setAttribute('aria-label', String(c.metas[i]));
+            seg.setAttribute('title', String(c.metas[i]));
 
             const updateValue = () => {
                 document.getElementById(c.input).value = c.metas[i];

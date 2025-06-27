@@ -15,7 +15,8 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto;
-    background: var(--background);
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    min-height: 100vh;
 }
 
 .sr-only {
@@ -38,21 +39,6 @@ body {
 #comisionTotal {
     font-size: 24px;
     font-weight: bold;
-}
-.progress-segment {
-    flex: 1;
-    margin-right: 2px;
-    background: var(--light-gray);
-    cursor: pointer;
-}
-.progress-segment:last-child {
-    margin-right: 0;
-}
-.progress-segment.reached {
-    background: var(--success);
-}
-.progress-segment.current {
-    background: var(--primary);
 }
 
 
@@ -93,4 +79,176 @@ body {
 
 .pdf-menu-options button:hover {
     background: #f0f0f0;
+}
+
+/* Layout */
+#container {
+    display: flex;
+    min-height: 100vh;
+}
+
+#sidebar {
+    width: 320px;
+    padding: 20px;
+    background: linear-gradient(180deg, var(--primary), var(--primary-light));
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+#sidebar header {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#sidebar select {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+    padding: 8px;
+    border: none;
+}
+
+#result {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Form fields */
+form label .icon {
+    margin-right: 4px;
+}
+
+input, select {
+    border-radius: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--light-gray);
+    background: #fff;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,109,119,0.3);
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: var(--primary-light);
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+button:active::after {
+    width: 200%;
+    padding-bottom: 200%;
+    transition: width 0.6s ease, padding-bottom 0.6s ease;
+}
+
+/* KPI cards */
+.kpi-grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.kpi-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    min-width: 100px;
+    animation: fadeIn 0.5s ease;
+}
+
+.kpi-card.total {
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+    color: var(--dark);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress bars */
+.progress {
+    display: flex;
+    height: 8px;
+}
+
+.progress-segment {
+    flex: 1;
+    margin-right: 2px;
+    background: var(--light-gray);
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+.progress-segment:last-child {
+    margin-right: 0;
+}
+
+.progress-segment::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.progress-segment:hover::after {
+    opacity: 1;
+}
+
+.progress-segment.reached {
+    background: var(--success);
+    animation: fill 0.5s forwards;
+}
+
+.progress-segment.current {
+    background: var(--primary);
+}
+
+@keyframes fill {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
 }

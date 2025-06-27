@@ -13,6 +13,36 @@ let multEmpatia;
 let multProceso;
 let multMora;
 
+let donutChart;
+
+function animateValue(el, start, end) {
+    const duration = 500;
+    const startTime = performance.now();
+    function step(time) {
+        const progress = Math.min((time - startTime) / duration, 1);
+        const value = Math.floor(progress * (end - start) + start);
+        el.textContent = value.toLocaleString('es-ES');
+        if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
+function initChart() {
+    const ctx = document.getElementById('chartComision');
+    if (!ctx) return;
+    donutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Base','Carrera','Interno','Externo','Recuperado','Cantidad','Equipo'],
+            datasets: [{
+                data: [0,0,0,0,0,0,0],
+                backgroundColor: ['#006D77','#83C5BE','#4CAF50','#2196F3','#FF9800','#9C27B0','#795548']
+            }]
+        },
+        options: { plugins: { legend: { display: false } } }
+    });
+}
+
 let profiles = loadStoredProfiles() || cloneConfig(defaultProfiles);
 
 let currentProfile = 'agil_1';
@@ -71,7 +101,26 @@ function calcular() {
     updateProgress('progRecuperado', calcularNivel(datos.montoRecuperado, 'recuperado', cfg));
     updateProgress('progCantidad', calcularNivel(datos.cantidad, 'cantidad', cfg));
 
-    document.getElementById('comisionTotal').innerText = resultado.total.toLocaleString('es-ES');
+    const totalEl = document.getElementById('comisionTotal');
+    const prev = parseMoney(totalEl.textContent) || 0;
+    animateValue(totalEl, prev, resultado.total);
+
+    document.getElementById('kpiNivel').innerText = resultado.nivelCarreraFinal >= 0 ? niveles[resultado.nivelCarreraFinal] : 'Sin nivel';
+    document.getElementById('kpiSubtotal').innerText = resultado.subtotal.toLocaleString('es-ES');
+    document.getElementById('kpiMultiplicador').innerText = resultado.multiplicador.toFixed(2);
+
+    if (donutChart) {
+        donutChart.data.datasets[0].data = [
+            resultado.detalle.base,
+            resultado.detalle.carrera,
+            resultado.detalle.interno,
+            resultado.detalle.externo,
+            resultado.detalle.recuperado,
+            resultado.detalle.cantidad,
+            resultado.detalle.equipo
+        ];
+        donutChart.update();
+    }
 
     document.getElementById('detalle').innerHTML = `
         <p>Nivel Carrera: ${resultado.nivelCarreraFinal >= 0 ? niveles[resultado.nivelCarreraFinal] : 'Sin nivel'}</p>
@@ -104,4 +153,5 @@ window.descargarPDF = descargarPDF;
 const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
 initMoneyFormat();
+initChart();
 updateCalculations();
