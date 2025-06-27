@@ -21,6 +21,10 @@
                 <option value="empresarial_1">Empresarial 1</option>
                 <option value="empresarial_2">Empresarial 2</option>
             </select>
+            <label class="theme-switch" for="themeToggle">
+                <input type="checkbox" id="themeToggle" aria-label="Modo oscuro">
+                <span>🌙</span>
+            </label>
             <div class="pdf-menu">
                 <button type="button" class="header-btn" onclick="togglePDFMenu()" aria-haspopup="true" aria-expanded="false">📄 PDF ▼</button>
                 <div class="pdf-menu-options" id="pdfMenuOptions" role="menu">
@@ -145,6 +149,13 @@
         </div>
         <section id="detalle"></section>
     </main>
+    </div>
+</div>
+<div id="tourOverlay" class="tour-overlay hidden">
+    <div class="tour-content">
+        <p>Bienvenido al sistema de comisiones. Aquí podrás ingresar tus datos y ver el resultado en tiempo real.</p>
+        <label><input type="checkbox" id="dontShowTour"> No mostrar de nuevo</label>
+        <button onclick="closeTour()">Cerrar</button>
     </div>
 </div>
 <script type="module" src="app.js"></script>
