@@ -237,8 +237,24 @@ function descargarPDF() {
     doc.save('comision.pdf');
 }
 
+function updateInputState(el) {
+    el.classList.remove('empty-required', 'empty-optional', 'filled', 'error');
+    if (el.value.trim() === '') {
+        el.classList.add(el.required ? 'empty-required' : 'empty-optional');
+    } else {
+        el.classList.add('filled');
+        if (!el.checkValidity()) {
+            el.classList.add('error');
+        }
+    }
+}
+
 document.querySelectorAll('#datosForm input, #datosForm select').forEach(el => {
-    el.addEventListener('input', calcular);
+    const update = () => updateInputState(el);
+    el.addEventListener('input', () => { update(); calcular(); });
+    el.addEventListener('focus', () => el.classList.add('focus'));
+    el.addEventListener('blur', () => { el.classList.remove('focus'); update(); });
+    update();
 });
 
 document.getElementById('pdfButton').addEventListener('click', descargarPDF);

@@ -37,12 +37,6 @@ input, select {
     margin-bottom: 10px;
     box-sizing: border-box;
 }
-input:required:invalid {
-    border: 1px solid red;
-}
-input:not(:placeholder-shown) {
-    border: 1px solid green;
-}
 #comisionTotal {
     font-size: 24px;
     font-weight: bold;
@@ -66,4 +60,32 @@ input:not(:placeholder-shown) {
 }
 .progress div.current {
     background: #003f7f;
+}
+
+/* Input state classes */
+.empty-required {
+    border: 1px solid #F44336;
+    background: #FFEBEE;
+}
+.empty-optional {
+    border: 1px solid #FFA726;
+    background: #FFF8E1;
+}
+.filled {
+    border: 1px solid #4CAF50;
+}
+.focus {
+    border: 1px solid #2196F3;
+    box-shadow: 0 0 4px rgba(33, 150, 243, 0.6);
+    transform: scale(1.01);
+}
+.error {
+    border: 1px solid #F44336;
+    animation: shake 0.3s;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
 }
