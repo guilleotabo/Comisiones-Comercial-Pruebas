@@ -494,3 +494,88 @@ button:active::after {
     overflow-y: auto;
 }
 
+/* Dashboard Right Panel */
+.dash-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 16px;
+    margin-bottom: 1rem;
+    width: 100%;
+    transition: box-shadow var(--transition-normal);
+}
+
+.dash-card.grid {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.dash-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.header-main {
+    text-align: center;
+}
+
+.header-main .counter {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.header-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.potencial {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.slider-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+}
+
+.slider-group input[type="range"] {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.pot-card {
+    flex: 1 1 120px;
+    background: var(--secondary);
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform var(--transition-fast);
+    cursor: pointer;
+}
+
+.pot-card:hover {
+    transform: scale(1.05);
+}
+
+#tablaLiquidacion table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#tablaLiquidacion th, #tablaLiquidacion td {
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+#tablaLiquidacion tfoot td {
+    font-weight: bold;
+}
+
