@@ -2,6 +2,7 @@
   "name": "comisiones-comercial-sersa",
   "version": "1.0.0",
   "description": "Sistema de Comisiones Comerciales - SERSA SAECA",
+  "type": "module",
   "scripts": {
     "test": "jest"
   },

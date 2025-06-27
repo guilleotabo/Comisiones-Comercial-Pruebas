@@ -1,7 +1,7 @@
 // TESTS AUTOMÁTICOS - No te asustes, son como fórmulas de Excel
 
 // Importar las funciones a probar
-const { calcularNivel, calcularMultiplicador, calcularComisionTotal } = require('../../src/modules/calculations');
+import { calcularNivel, calcularMultiplicador, calcularComisionTotal } from '../../src/modules/calculations.js';
 
 // GRUPO 1: Probar cálculo de niveles
 describe('Pruebas de Niveles', () => {
