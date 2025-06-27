@@ -2,13 +2,15 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     display: flex;
+    flex-direction: column;
 }
 #container {
     display: flex;
+    flex-direction: column;
     width: 100%;
 }
 #sidebar {
-    width: 320px;
+    width: 100%;
     padding: 20px;
     background: #f4f4f4;
     box-sizing: border-box;
@@ -66,4 +68,38 @@ input:not(:placeholder-shown) {
 }
 .progress div.current {
     background: #003f7f;
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 576px) {
+    /* Landscape phones */
+    #sidebar {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Tablets */
+    #container {
+        flex-direction: row;
+    }
+    #sidebar {
+        width: 280px;
+        margin: 0;
+    }
+}
+
+@media (min-width: 992px) {
+    /* Desktop */
+    #sidebar {
+        width: 320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    /* Large desktop */
+    #sidebar {
+        width: 360px;
+    }
 }
