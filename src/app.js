@@ -273,8 +273,43 @@ function initMoneyFormat() {
 
 function togglePDFMenu() {
     const menu = document.getElementById('pdfMenuOptions');
-    if (!menu) return;
-    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    const btn = document.querySelector('.pdf-menu > button');
+    if (!menu || !btn) return;
+    menu.classList.toggle('open');
+    const isOpen = menu.classList.contains('open');
+    btn.setAttribute('aria-expanded', isOpen);
+    if (isOpen) {
+        document.addEventListener('click', handleOutsideClick);
+        document.addEventListener('keydown', handleEscape);
+    } else {
+        document.removeEventListener('click', handleOutsideClick);
+        document.removeEventListener('keydown', handleEscape);
+    }
+}
+
+function closePDFMenu() {
+    const menu = document.getElementById('pdfMenuOptions');
+    const btn = document.querySelector('.pdf-menu > button');
+    if (!menu || !btn) return;
+    if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('click', handleOutsideClick);
+        document.removeEventListener('keydown', handleEscape);
+    }
+}
+
+function handleOutsideClick(e) {
+    const container = document.querySelector('.pdf-menu');
+    if (container && !container.contains(e.target)) {
+        closePDFMenu();
+    }
+}
+
+function handleEscape(e) {
+    if (e.key === 'Escape') {
+        closePDFMenu();
+    }
 }
 
 setupPDFGeneration();
