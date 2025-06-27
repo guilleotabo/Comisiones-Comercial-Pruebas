@@ -62,25 +62,30 @@ function getMult(valor, tabla) {
     return tabla[tabla.length - 1].mult;
 }
 
-function calcular() {
-    const montoInterno = Number(document.getElementById('montoInterno').value) || 0;
-    const montoExterno = Number(document.getElementById('montoExterno').value) || 0;
-    const montoRecuperado = Number(document.getElementById('montoRecuperado').value) || 0;
-    const cantidad = Number(document.getElementById('cantidad').value) || 0;
-    const menorSemana = Number(document.getElementById('menorSemana').value) || 0;
-    const conv = Number(document.getElementById('conv').value) || 0;
-    const emp = Number(document.getElementById('emp').value) || 0;
-    const proc = Number(document.getElementById('proc').value) || 0;
-    const mora = Number(document.getElementById('mora').value) || 0;
-    const nivelAnterior = Number(document.getElementById('nivelAnterior').value);
-    const nivelEquipo = Number(document.getElementById('nivelEquipo').value);
-
+function calculateCommission({
+    montoInterno = 0,
+    montoExterno = 0,
+    montoRecuperado = 0,
+    cantidad = 0,
+    menorSemana = 0,
+    conv = 0,
+    emp = 0,
+    proc = 0,
+    mora = 0,
+    nivelAnterior = 0,
+    nivelEquipo = 0
+} = {}) {
     const nivelInterno = nivelPorValor(montoInterno, metas.montoInterno);
     const nivelExterno = nivelPorValor(montoExterno, metas.montoExterno);
     const nivelRecuperado = nivelPorValor(montoRecuperado, metas.montoRecuperado);
     const nivelCantidad = menorSemana >= 2 ? nivelPorValor(cantidad, metas.cantidad) : -1;
 
-    const nivelCarreraMes = Math.min(nivelInterno, nivelExterno, nivelRecuperado, nivelCantidad === -1 ? -1 : nivelCantidad);
+    const nivelCarreraMes = Math.min(
+        nivelInterno,
+        nivelExterno,
+        nivelRecuperado,
+        nivelCantidad === -1 ? -1 : nivelCantidad
+    );
     const nivelCarreraFinal = Math.min(nivelCarreraMes, nivelAnterior);
 
     const llaveMontos = cantidad >= 6;
@@ -89,23 +94,60 @@ function calcular() {
     const premioExterno = llaveMontos ? pagos.montoExterno[nivelExterno] : 0;
     const premioRecuperado = llaveMontos ? pagos.montoRecuperado[nivelRecuperado] : 0;
     const premioCantidad = nivelCantidad >= 0 ? pagos.cantidad[nivelCantidad] : 0;
-    const premioEquipo = (nivelCarreraFinal >= 2 && nivelEquipo >= 2)
-        ? pagos.equipo[Math.min(nivelCarreraFinal, nivelEquipo)]
-        : 0;
+    const premioEquipo =
+        nivelCarreraFinal >= 2 && nivelEquipo >= 2
+            ? pagos.equipo[Math.min(nivelCarreraFinal, nivelEquipo)]
+            : 0;
 
-    const subtotal = pagos.base + premioCarrera + premioInterno + premioExterno + premioRecuperado + premioCantidad + premioEquipo;
+    const subtotal =
+        pagos.base +
+        premioCarrera +
+        premioInterno +
+        premioExterno +
+        premioRecuperado +
+        premioCantidad +
+        premioEquipo;
     const parteVariable = subtotal - pagos.base;
-    let multiplicadorTotal = getMult(conv, multConversion) * getMult(emp, multEmpatia) * getMult(proc, multProceso) * getMult(mora, multMora);
+    let multiplicadorTotal =
+        getMult(conv, multConversion) *
+        getMult(emp, multEmpatia) *
+        getMult(proc, multProceso) *
+        getMult(mora, multMora);
     if (multiplicadorTotal < 0.1) multiplicadorTotal = 0.1;
     const totalVariable = parteVariable * multiplicadorTotal;
     const comisionFinal = pagos.base + totalVariable;
 
-    document.getElementById('comisionTotal').innerText = comisionFinal.toLocaleString('es-ES');
+    return {
+        total: comisionFinal,
+        subtotal,
+        multiplicador: multiplicadorTotal,
+        nivelCarreraFinal
+    };
+}
+
+function calcular() {
+    const data = {
+        montoInterno: Number(document.getElementById('montoInterno').value) || 0,
+        montoExterno: Number(document.getElementById('montoExterno').value) || 0,
+        montoRecuperado: Number(document.getElementById('montoRecuperado').value) || 0,
+        cantidad: Number(document.getElementById('cantidad').value) || 0,
+        menorSemana: Number(document.getElementById('menorSemana').value) || 0,
+        conv: Number(document.getElementById('conv').value) || 0,
+        emp: Number(document.getElementById('emp').value) || 0,
+        proc: Number(document.getElementById('proc').value) || 0,
+        mora: Number(document.getElementById('mora').value) || 0,
+        nivelAnterior: Number(document.getElementById('nivelAnterior').value),
+        nivelEquipo: Number(document.getElementById('nivelEquipo').value)
+    };
+
+    const result = calculateCommission(data);
+
+    document.getElementById('comisionTotal').innerText = result.total.toLocaleString('es-ES');
 
     document.getElementById('detalle').innerHTML = `
-        <p>Nivel Carrera: ${nivelCarreraFinal >= 0 ? niveles[nivelCarreraFinal] : 'Sin nivel'}</p>
-        <p>Subtotal: ${subtotal.toLocaleString('es-ES')}</p>
-        <p>Multiplicador: ${multiplicadorTotal.toFixed(2)}</p>
+        <p>Nivel Carrera: ${result.nivelCarreraFinal >= 0 ? niveles[result.nivelCarreraFinal] : 'Sin nivel'}</p>
+        <p>Subtotal: ${result.subtotal.toLocaleString('es-ES')}</p>
+        <p>Multiplicador: ${result.multiplicador.toFixed(2)}</p>
     `;
 }
 
@@ -125,3 +167,7 @@ document.querySelectorAll('#datosForm input, #datosForm select').forEach(el => {
 document.getElementById('pdfButton').addEventListener('click', descargarPDF);
 
 calcular();
+
+if (typeof module !== 'undefined') {
+    module.exports = { calculateCommission };
+}
