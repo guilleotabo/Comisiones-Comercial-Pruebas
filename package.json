@@ -4,7 +4,7 @@
   "description": "Sistema de Comisiones Comerciales - SERSA SAECA",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "node jest.mjs"
   },
   "devDependencies": {
     "jest": "^27.0.0"
