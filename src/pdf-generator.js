@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Chart from 'chart.js/auto';
+import { parseMoney, formatMoney as formatGuarani } from './modules/validators.js';
 
 export class PDFGenerator {
   constructor() {
@@ -295,7 +296,7 @@ export class PDFGenerator {
   }
 
   formatMoney(value) {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return formatGuarani(value);
   }
 
   getProgressBar(current, target) {
