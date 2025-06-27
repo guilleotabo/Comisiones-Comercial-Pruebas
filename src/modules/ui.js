@@ -33,8 +33,20 @@ export function initProgressBars(metas) {
         const bar = document.getElementById(c.bar);
         if (!bar) return;
         Array.from(bar.children).forEach((seg, i) => {
-            seg.addEventListener('click', () => {
+            seg.setAttribute('tabindex', '0');
+            seg.setAttribute('role', 'button');
+            seg.setAttribute('aria-label', String(c.metas[i]));
+
+            const updateValue = () => {
                 document.getElementById(c.input).value = c.metas[i];
+            };
+
+            seg.addEventListener('click', updateValue);
+            seg.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    updateValue();
+                }
             });
         });
     });
