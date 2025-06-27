@@ -4,6 +4,7 @@ import { defaultProfiles, cloneConfig } from './modules/config.js';
 import { loadStoredProfiles } from './modules/storage.js';
 import { calcularComisionTotal, calcularNivel } from './modules/calculations.js';
 import { updateProgress, resetProgressBars, initProgressBars, initMoneyFormat, togglePDFMenu } from './modules/ui.js';
+import { initGamification, checkAchievements, shareResults } from './modules/gamification.js';
 
 let niveles;
 let metas;
@@ -267,6 +268,8 @@ function calcular() {
         <p>Subtotal: ${resultado.subtotal.toLocaleString('es-ES')}</p>
         <p>Multiplicador: ${resultado.multiplicador.toFixed(2)}</p>
     `;
+
+    checkAchievements(resultado);
 }
 
 function descargarPDF() {
@@ -291,6 +294,7 @@ window.togglePDFMenu = togglePDFMenu;
 window.descargarPDF = descargarPDF;
 window.toggleTheme = toggleTheme;
 window.closeTour = closeTour;
+window.shareResults = shareResults;
 
 const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
@@ -300,4 +304,5 @@ initBarChart();
 initGaugeCharts();
 initTheme();
 initTour();
+initGamification();
 updateCalculations();
