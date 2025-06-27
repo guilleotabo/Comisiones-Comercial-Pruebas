@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistema de Comisiones - SERSA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="comisiones.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
-<body>
-<div id="container">
-    <aside id="sidebar">
+<body class="bg-light">
+<div class="container-fluid">
+    <div class="row g-3" id="container">
+    <aside id="sidebar" class="col-12 col-md-4 col-lg-3">
         <header>
             <h1>Comisiones SERSA</h1>
             <select id="profileSelect" onchange="changeProfile(this.value)">
@@ -28,9 +30,10 @@
                 </div>
             </div>
         </header>
-        <form id="datosForm">
-            <label>Nivel anterior
-                <select id="nivelAnterior">
+        <form id="datosForm" class="mt-3">
+            <div class="mb-3">
+                <label for="nivelAnterior" class="form-label">Nivel anterior</label>
+                <select id="nivelAnterior" class="form-select">
                     <option value="0">Capilla</option>
                     <option value="1">Junior</option>
                     <option value="2" selected>Senior A</option>
@@ -38,41 +41,47 @@
                     <option value="4">Máster</option>
                     <option value="5">Genio</option>
                 </select>
-            </label>
-            <label>Monto Interno*
-                <input type="text" id="montoInterno" inputmode="numeric" required aria-label="Monto Interno" aria-required="true" aria-describedby="descMontoInterno">
-            </label>
-            <small id="descMontoInterno" class="sr-only">Monto total de operaciones internas</small>
-            <div id="progInterno" class="progress">
-                <div></div><div></div><div></div><div></div><div></div><div></div>
             </div>
-            <label>Monto Externo*
-                <input type="text" id="montoExterno" inputmode="numeric" required aria-label="Monto Externo" aria-required="true" aria-describedby="descMontoExterno">
-            </label>
-            <small id="descMontoExterno" class="sr-only">Monto total de operaciones externas</small>
-            <div id="progExterno" class="progress">
-                <div></div><div></div><div></div><div></div><div></div><div></div>
+            <div class="mb-3">
+                <label for="montoInterno" class="form-label">Monto Interno*</label>
+                <input type="text" id="montoInterno" class="form-control" inputmode="numeric" required aria-label="Monto Interno" aria-describedby="descMontoInterno">
+                <small id="descMontoInterno" class="form-text">Monto total de operaciones internas</small>
+                <div id="progInterno" class="progress my-2">
+                    <div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div>
+                </div>
             </div>
-            <label>Recuperados*
-                <input type="text" id="montoRecuperado" inputmode="numeric" required aria-label="Monto Recuperado" aria-required="true" aria-describedby="descRecuperado">
-            </label>
-            <small id="descRecuperado" class="sr-only">Monto recuperado superior a 3M</small>
-            <div id="progRecuperado" class="progress">
-                <div></div><div></div><div></div><div></div><div></div><div></div>
+            <div class="mb-3">
+                <label for="montoExterno" class="form-label">Monto Externo*</label>
+                <input type="text" id="montoExterno" class="form-control" inputmode="numeric" required aria-label="Monto Externo" aria-describedby="descMontoExterno">
+                <small id="descMontoExterno" class="form-text">Monto total de operaciones externas</small>
+                <div id="progExterno" class="progress my-2">
+                    <div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div>
+                </div>
             </div>
-            <label>Cantidad*
-                <input type="number" id="cantidad" required aria-label="Cantidad de desembolsos" aria-required="true" aria-describedby="descCantidad">
-            </label>
-            <small id="descCantidad" class="sr-only">Número total de desembolsos</small>
-            <div id="progCantidad" class="progress">
-                <div></div><div></div><div></div><div></div><div></div><div></div>
+            <div class="mb-3">
+                <label for="montoRecuperado" class="form-label">Recuperados*</label>
+                <input type="text" id="montoRecuperado" class="form-control" inputmode="numeric" required aria-label="Monto Recuperado" aria-describedby="descRecuperado">
+                <small id="descRecuperado" class="form-text">Monto recuperado superior a 3M</small>
+                <div id="progRecuperado" class="progress my-2">
+                    <div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div>
+                </div>
             </div>
-            <label>Menor Semana*
-                <input type="number" id="menorSemana" min="0" max="4" required aria-label="Menor semana" aria-required="true" aria-describedby="descSemana">
-            </label>
-            <small id="descSemana" class="sr-only">Semanas con al menos un desembolso</small>
-            <label>Menor nivel del equipo
-                <select id="nivelEquipo">
+            <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad*</label>
+                <input type="number" id="cantidad" class="form-control" required aria-label="Cantidad de desembolsos" aria-describedby="descCantidad">
+                <small id="descCantidad" class="form-text">Número total de desembolsos</small>
+                <div id="progCantidad" class="progress my-2">
+                    <div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div><div class="progress-bar progress-segment"></div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="menorSemana" class="form-label">Menor Semana*</label>
+                <input type="number" id="menorSemana" class="form-control" min="0" max="4" required aria-label="Menor semana" aria-describedby="descSemana">
+                <small id="descSemana" class="form-text">Semanas con al menos un desembolso</small>
+            </div>
+            <div class="mb-3">
+                <label for="nivelEquipo" class="form-label">Menor nivel del equipo</label>
+                <select id="nivelEquipo" class="form-select">
                     <option value="0">Capilla</option>
                     <option value="1">Junior</option>
                     <option value="2">Senior A</option>
@@ -80,25 +89,31 @@
                     <option value="4">Máster</option>
                     <option value="5">Genio</option>
                 </select>
-            </label>
-            <fieldset>
+            </div>
+            <fieldset class="mb-3">
                 <legend>Multiplicadores (%)</legend>
-                <label>Conversión
-                    <input type="number" id="conv" required aria-label="Porcentaje de conversión" aria-required="true" aria-describedby="descConv">
-                </label>
-                <small id="descConv" class="sr-only">Resultado de conversión (%)</small>
-                <label>Empatía
-                    <input type="number" id="emp" required aria-label="Porcentaje de empatía" aria-required="true" aria-describedby="descEmp">
-                </label>
-                <small id="descEmp" class="sr-only">Puntuación de empatía</small>
-                <label>Proceso
-                    <input type="number" id="proc" required aria-label="Porcentaje de proceso" aria-required="true" aria-describedby="descProc">
-                </label>
-                <small id="descProc" class="sr-only">Calidad de proceso CRM</small>
-                <label>Mora
-                    <input type="number" id="mora" required aria-label="Porcentaje de mora" aria-required="true" aria-describedby="descMora">
-                </label>
-                <small id="descMora" class="sr-only">Porcentaje de mora</small>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label for="conv" class="form-label">Conversión</label>
+                        <input type="number" id="conv" class="form-control" required aria-label="Porcentaje de conversión" aria-describedby="descConv">
+                        <small id="descConv" class="form-text">Resultado de conversión (%)</small>
+                    </div>
+                    <div class="col-6">
+                        <label for="emp" class="form-label">Empatía</label>
+                        <input type="number" id="emp" class="form-control" required aria-label="Porcentaje de empatía" aria-describedby="descEmp">
+                        <small id="descEmp" class="form-text">Puntuación de empatía</small>
+                    </div>
+                    <div class="col-6">
+                        <label for="proc" class="form-label">Proceso</label>
+                        <input type="number" id="proc" class="form-control" required aria-label="Porcentaje de proceso" aria-describedby="descProc">
+                        <small id="descProc" class="form-text">Calidad de proceso CRM</small>
+                    </div>
+                    <div class="col-6">
+                        <label for="mora" class="form-label">Mora</label>
+                        <input type="number" id="mora" class="form-control" required aria-label="Porcentaje de mora" aria-describedby="descMora">
+                        <small id="descMora" class="form-text">Porcentaje de mora</small>
+                    </div>
+                </div>
             </fieldset>
         </form>
     </aside>
@@ -109,7 +124,9 @@
         </section>
         <section id="detalle"></section>
     </main>
+    </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>
