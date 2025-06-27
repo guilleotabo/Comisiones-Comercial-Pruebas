@@ -96,6 +96,7 @@ document.querySelectorAll('#datosForm input, #datosForm select').forEach(el => {
 
 setupPDFGeneration();
 
+window.calcular = calcular;
 window.changeProfile = changeProfile;
 window.togglePDFMenu = togglePDFMenu;
 window.descargarPDF = descargarPDF;
