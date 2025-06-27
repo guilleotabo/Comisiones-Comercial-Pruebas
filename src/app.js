@@ -8,6 +8,18 @@ let multMora;
 
 const STORAGE_KEY = 'commission_profiles';
 
+function parseMoney(value) {
+    if (typeof value === 'number') return value;
+    if (!value) return 0;
+    return Number(value.toString().replace(/\./g, ''));
+}
+
+function formatMoney(value) {
+    const num = parseMoney(value);
+    if (isNaN(num)) return '';
+    return num.toLocaleString('es-ES');
+}
+
 function loadStoredProfiles() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -177,9 +189,9 @@ function getMult(valor, tabla) {
 }
 
 function calcular() {
-    const montoInterno = Number(document.getElementById('montoInterno').value) || 0;
-    const montoExterno = Number(document.getElementById('montoExterno').value) || 0;
-    const montoRecuperado = Number(document.getElementById('montoRecuperado').value) || 0;
+    const montoInterno = parseMoney(document.getElementById('montoInterno').value) || 0;
+    const montoExterno = parseMoney(document.getElementById('montoExterno').value) || 0;
+    const montoRecuperado = parseMoney(document.getElementById('montoRecuperado').value) || 0;
     const cantidad = Number(document.getElementById('cantidad').value) || 0;
     const menorSemana = Number(document.getElementById('menorSemana').value) || 0;
     const conv = Number(document.getElementById('conv').value) || 0;
@@ -241,8 +253,24 @@ document.querySelectorAll('#datosForm input, #datosForm select').forEach(el => {
     el.addEventListener('input', calcular);
 });
 
+function initMoneyFormat() {
+    ['montoInterno', 'montoExterno', 'montoRecuperado'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('blur', () => {
+            el.value = formatMoney(el.value);
+            calcular();
+        });
+        el.addEventListener('focus', () => {
+            const val = parseMoney(el.value);
+            el.value = val ? val : '';
+        });
+    });
+}
+
 document.getElementById('pdfButton').addEventListener('click', descargarPDF);
 
 const savedProfile = localStorage.getItem('currentProfile') || 'agil_1';
 applyProfile(savedProfile);
+initMoneyFormat();
 updateCalculations();
