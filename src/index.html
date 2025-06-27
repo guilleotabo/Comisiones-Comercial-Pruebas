@@ -21,10 +21,10 @@
                 <option value="empresarial_2">Empresarial 2</option>
             </select>
             <div class="pdf-menu">
-                <button type="button" class="header-btn" onclick="togglePDFMenu()">📄 PDF ▼</button>
-                <div class="pdf-menu-options" id="pdfMenuOptions" style="display: none;">
-                    <button type="button" onclick="descargarPDF()">📄 PDF Simple</button>
-                    <button type="button" onclick="generateProfessionalPDF()">📊 PDF Profesional</button>
+                <button type="button" class="header-btn" onclick="togglePDFMenu()" aria-haspopup="true" aria-expanded="false">📄 PDF ▼</button>
+                <div class="pdf-menu-options" id="pdfMenuOptions" role="menu">
+                    <button type="button" role="menuitem" onclick="descargarPDF()">📄 PDF Simple</button>
+                    <button type="button" role="menuitem" onclick="generateProfessionalPDF()">📊 PDF Profesional</button>
                 </div>
             </div>
         </header>
