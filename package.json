@@ -1,0 +1,11 @@
+{
+  "name": "comisiones-comercial-sersa",
+  "version": "1.0.0",
+  "description": "Sistema de Comisiones Comerciales - SERSA SAECA",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^27.0.0"
+  }
+}

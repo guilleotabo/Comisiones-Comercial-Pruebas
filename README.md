@@ -56,6 +56,10 @@ npm install
 npm test
 ```
 
+Para verificar la aplicación manualmente revisa el archivo
+`tests/manual/checklist.md`, que contiene los pasos descritos en la
+sección 16.2 de *SPECIFICATIONS.md*.
+
 ## **📄 Licencia**
 
 MIT
