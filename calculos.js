@@ -102,7 +102,7 @@ const Calculos = (function() {
         const peorMultiplicador = Object.entries(multiplicadores)
             .filter(([tipo]) => tipo !== 'mora' && tipo !== 'total')
             .map(([tipo, valor]) => ({ tipo, valor }))
-            .reduce((min, curr) => curr.valor < min.valor ? curr : min);
+            .reduce((min, curr) => curr.valor < min.valor ? curr : min, { tipo: '', valor: 1 });
 
         if (peorMultiplicador.valor < 1) {
             const mejoraPotencial = (subtotal - config.base) * (1 - peorMultiplicador.valor);
