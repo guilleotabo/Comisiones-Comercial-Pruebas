@@ -11,6 +11,38 @@ const motivationalQuotes = [
 let unlocked = [];
 let lastResult = {};
 
+function renderConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width = window.innerWidth;
+    const height = canvas.height = window.innerHeight;
+    canvas.classList.remove('hidden');
+
+    const pieces = Array.from({ length: 100 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height - height,
+        size: 5 + Math.random() * 5,
+        color: `hsl(${Math.random() * 360},100%,50%)`,
+        speed: Math.random() * 3 + 2
+    }));
+
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+        pieces.forEach(p => {
+            p.y += p.speed;
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        if (pieces.some(p => p.y < height)) {
+            requestAnimationFrame(draw);
+        } else {
+            canvas.classList.add('hidden');
+        }
+    }
+    draw();
+}
+
 function loadAchievements() {
     try {
         const data = localStorage.getItem(ACH_KEY);
@@ -115,6 +147,7 @@ export function checkAchievements(result) {
             unlocked.push(a.id);
             saveAchievements();
             showAchievement(a);
+            if (a.id === 'genio') renderConfetti();
         }
     });
     updateProgressRing(result.total);

@@ -579,3 +579,15 @@ button:active::after {
     font-weight: bold;
 }
 
+/* Confetti Canvas */
+#confettiCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3000;
+}
+
+.confetti.hidden {
+    display: none;
+}
+
