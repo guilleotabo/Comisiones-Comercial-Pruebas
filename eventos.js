@@ -14,8 +14,9 @@ const Eventos = (function() {
 
     function handleFormInput(event) {
         const input = event.target;
+        if (!input.matches('input, select')) return;
         
-        // Validar y formatear campos numéricos
+        // Formatear campos de montos
         if (['montoInterno', 'montoExterno', 'montoRecuperado'].includes(input.id)) {
              const value = input.value.replace(/\D/g, ''); // Solo números
              const cursorPos = input.selectionStart;
@@ -24,17 +25,11 @@ const Eventos = (function() {
              input.value = value ? UI.formatNumber(parseInt(value, 10)) : '';
              
              const newLength = input.value.length;
-             input.setSelectionRange(cursorPos + (newLength - oldLength), cursorPos + (newLength - oldLength));
+             if (cursorPos !== null) {
+                input.setSelectionRange(cursorPos + (newLength - oldLength), cursorPos + (newLength - oldLength));
+             }
         }
         
-        // Validar campos de porcentaje
-        if (['conversion', 'empatia', 'proceso', 'mora'].includes(input.id)) {
-            let value = parseInt(input.value.replace(/\D/g, ''), 10);
-            if (isNaN(value) || value < 0) value = 0;
-            if (value > 100) value = 100;
-            input.value = value;
-        }
-
         // Marcar campos requeridos como llenos o vacíos
         if (input.classList.contains('required')) {
             input.classList.toggle('filled', !!input.value);
@@ -46,12 +41,20 @@ const Eventos = (function() {
     
     // Delegación de eventos para clics en elementos dinámicos
     function handleContainerClick(event) {
-        const target = event.target.closest('[data-tipo]');
+        const target = event.target.closest('[data-tipo][data-valor]');
 
         if (target && (target.classList.contains('progress-segment') || target.classList.contains('multiplier-row'))) {
             const tipo = target.dataset.tipo;
             const valor = target.dataset.valor;
-            const input = document.getElementById(tipo);
+            let inputId = tipo;
+            
+            // Mapeo para nombres de inputs diferentes
+            if (tipo === 'interno') inputId = 'montoInterno';
+            if (tipo === 'externo') inputId = 'montoExterno';
+            if (tipo === 'recuperado') inputId = 'montoRecuperado';
+            if (tipo === 'cantidad') inputId = 'cantidadDesembolsos';
+
+            const input = document.getElementById(inputId);
             if (input) {
                 input.value = valor;
                 // Disparar un evento de input para que se actualice todo
@@ -74,10 +77,11 @@ const Eventos = (function() {
                 }[el.id] || '';
                 
                 el.value = defaultValue;
-                el.dispatchEvent(new Event('input', { bubbles: true })); // Para que se actualice la UI
+                // Disparar evento para actualizar la UI para cada campo reseteado
+                el.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
             });
             localStorage.removeItem('draftCommission');
-            updateCalculations();
+            // La actualización final se hará por el debounce
         }
     }
 
@@ -91,7 +95,7 @@ const Eventos = (function() {
            btn.textContent = '➡️ Mostrar';
            if (openBtn) openBtn.style.display = 'block';
        } else {
-           btn.textContent = '⬅️ Ocultar';
+           btn.textContent = '➡️ Ocultar';
            if (openBtn) openBtn.style.display = 'none';
        }
     }
