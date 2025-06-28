@@ -6,6 +6,7 @@ function generarPDFMejorado() {
 
     // Formatea un número a un string con separadores de miles (ej: 1000000 -> "1.000.000")
     function formatNumber(num) {
+        if (isNaN(num)) return "0";
         return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
