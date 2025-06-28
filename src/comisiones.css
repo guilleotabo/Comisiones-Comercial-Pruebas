@@ -428,6 +428,11 @@ button:active::after {
     margin-top: 1rem;
 }
 
+#streakInfo {
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
 #motivationalQuote {
     margin-top: 1rem;
     font-style: italic;
