@@ -52,6 +52,16 @@ body {
     font-weight: bold;
 }
 
+.positive-change {
+    color: var(--success);
+    animation: pulse 0.5s;
+}
+
+.negative-change {
+    color: var(--danger);
+    animation: pulse 0.5s;
+}
+
 
 /* PDF Menu Styles */
 .pdf-menu {
@@ -577,5 +587,11 @@ button:active::after {
 
 #tablaLiquidacion tfoot td {
     font-weight: bold;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 

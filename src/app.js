@@ -22,14 +22,20 @@ let progressChart;
 let comparativoNewChart;
 let generalGauge;
 
-function animateValue(el, start, end) {
+function animateValue(el, prev, next) {
     const duration = 500;
     const startTime = performance.now();
+    const changeClass = next >= prev ? 'positive-change' : 'negative-change';
+    el.classList.add(changeClass);
     function step(time) {
         const progress = Math.min((time - startTime) / duration, 1);
-        const value = Math.floor(progress * (end - start) + start);
+        const value = Math.floor(progress * (next - prev) + prev);
         el.textContent = formatMoney(value);
-        if (progress < 1) requestAnimationFrame(step);
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            el.classList.remove(changeClass);
+        }
     }
     requestAnimationFrame(step);
 }
