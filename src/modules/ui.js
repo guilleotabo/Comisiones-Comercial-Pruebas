@@ -4,13 +4,25 @@ export function updateProgress(id, nivel) {
     const bar = document.getElementById(id);
     if (!bar) return;
     const segs = bar.children;
+    const prev = parseInt(bar.dataset.level ?? '-1', 10);
     for (let i = 0; i < segs.length; i++) {
-        segs[i].classList.remove('reached', 'current');
-        if (nivel > i) segs[i].classList.add('reached');
+        segs[i].classList.remove('current');
+        if (nivel > i) {
+            if (i > prev) {
+                segs[i].classList.remove('reached');
+                void segs[i].offsetWidth;
+                segs[i].classList.add('reached');
+            } else {
+                segs[i].classList.add('reached');
+            }
+        } else {
+            segs[i].classList.remove('reached');
+        }
     }
     if (nivel >= 0 && nivel < segs.length) {
         segs[nivel].classList.add('current');
     }
+    bar.dataset.level = nivel;
 }
 
 export function resetProgressBars() {
