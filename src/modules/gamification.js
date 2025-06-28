@@ -1,6 +1,9 @@
 import { parseMoney } from './validators.js';
 
 const ACH_KEY = 'commission_achievements';
+const PREV_KEY = 'commission_prev_month';
+const CUR_KEY = 'commission_current_month';
+const STREAK_KEY = 'commission_streak';
 const motivationalQuotes = [
     '¡Sigue así, cada meta te acerca al éxito!',
     'Tu esfuerzo marcará la diferencia.',
@@ -10,6 +13,7 @@ const motivationalQuotes = [
 
 let unlocked = [];
 let lastResult = {};
+let streak = 0;
 
 function loadAchievements() {
     try {
@@ -23,6 +27,20 @@ function loadAchievements() {
 
 function saveAchievements() {
     localStorage.setItem(ACH_KEY, JSON.stringify(unlocked));
+}
+
+function loadJson(key) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (e) {
+        console.error('Error cargando', key, e);
+        return null;
+    }
+}
+
+function saveJson(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
 }
 
 const achievements = [
@@ -90,12 +108,47 @@ function updateRanking() {
     topEl.textContent = Math.round(pos / 50 * 100);
 }
 
+function updateStreakDisplay() {
+    const el = document.getElementById('streakCount');
+    if (el) el.textContent = streak;
+}
+
+function handleMonthlyProgress(total) {
+    const month = new Date().toISOString().slice(0,7);
+    let prev = loadJson(PREV_KEY);
+    let current = loadJson(CUR_KEY);
+    if (!current || current.month !== month) {
+        if (current) {
+            saveJson(PREV_KEY, current);
+            prev = current;
+        }
+        current = { month, total };
+        streak = 0;
+    } else {
+        current.total = total;
+    }
+
+    if (prev && prev.month !== month) {
+        if (total > prev.total) {
+            streak += 1;
+        } else if (total < prev.total) {
+            streak = 0;
+        }
+    }
+
+    saveJson(CUR_KEY, current);
+    localStorage.setItem(STREAK_KEY, String(streak));
+    updateStreakDisplay();
+}
+
 export function initGamification() {
     unlocked = loadAchievements();
     renderAchievements();
     updateMotivation();
     updateProgressRing(0);
     updateRanking();
+    streak = parseInt(localStorage.getItem(STREAK_KEY) || '0', 10);
+    updateStreakDisplay();
     const slider = document.getElementById('metaSlider');
     const metaValue = document.getElementById('metaValue');
     if (slider && metaValue) {
@@ -117,6 +170,7 @@ export function checkAchievements(result) {
             showAchievement(a);
         }
     });
+    handleMonthlyProgress(result.total);
     updateProgressRing(result.total);
     updateMotivation();
     updateRanking();
