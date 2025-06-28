@@ -3,6 +3,7 @@ const UI = (function() {
     // --- FUNCIONES DE UTILIDAD ---
 
     function formatNumber(num) {
+        if (isNaN(num)) return "0";
         return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
     
@@ -12,6 +13,7 @@ const UI = (function() {
     
     function getNumericValue(id) {
         const input = getElement(id);
+        if (!input) return 0;
         return parseInt(input.value.replace(/\D/g, ''), 10) || 0;
     }
 
@@ -19,6 +21,7 @@ const UI = (function() {
 
     function updateProgressBar(tipo, valor, nivelAlcanzado, config) {
         const { niveles, metas, pagos } = config;
+        const tipoLower = tipo.toLowerCase();
         const container = getElement(`barra${tipo}`);
         const info = getElement(`info${tipo}`);
         if (!container || !info) return;
@@ -32,10 +35,10 @@ const UI = (function() {
         let html = '<div class="progress-segments">';
         for (let i = 0; i < niveles.length; i++) {
             const className = `progress-segment ${i <= nivelAlcanzado ? 'reached' : ''} ${i === nivelAlcanzado ? 'current' : ''}`;
-            const metaTexto = tipo === 'Cantidad' ? metas.cantidad[i] : formatNumber(metas[tipo.toLowerCase()][i] / 1000000) + 'M';
-            const premioTexto = formatNumber(pagos[tipo.toLowerCase()][i]);
+            const metaTexto = tipo === 'Cantidad' ? metas.cantidad[i] : formatNumber(metas[tipoLower][i] / 1000000) + 'M';
+            const premioTexto = formatNumber(pagos[tipoLower][i]);
             
-            html += `<div class="${className}" data-tipo="${tipo.toLowerCase()}" data-valor="${metas[tipo.toLowerCase()][i]}">
+            html += `<div class="${className}" data-tipo="${tipoLower}" data-valor="${metas[tipoLower][i]}">
                         <div class="level">${niveles[i]}</div>
                         <div class="meta">Meta: ${metaTexto}</div>
                         <div class="premio">Premio: ${premioTexto}</div>
@@ -46,7 +49,7 @@ const UI = (function() {
         
         const progreso = maxMeta > 0 ? Math.round((valor / maxMeta) * 100) : 0;
         const nivelTexto = nivelAlcanzado >= 0 ? niveles[nivelAlcanzado] : 'Ninguno';
-        const premioTexto = nivelAlcanzado >= 0 ? formatNumber(pagos[tipo.toLowerCase()][nivelAlcanzado]) : '0';
+        const premioTexto = nivelAlcanzado >= 0 ? formatNumber(pagos[tipoLower][nivelAlcanzado]) : '0';
         
         info.innerHTML = `Progreso: ${tipo === 'Cantidad' ? valor : formatNumber(valor)} / ${tipo === 'Cantidad' ? maxMeta : formatNumber(maxMeta)} (${progreso}%)<br>
                          Nivel alcanzado: <strong>${nivelTexto}</strong> | Premio: <strong>${premioTexto} Gs</strong>`;
@@ -95,7 +98,7 @@ const UI = (function() {
         html += '</div>';
         container.innerHTML = html;
 
-        info.innerHTML = `Menor nivel del equipo: <strong>${niveles[nivelEquipo]}</strong> | Tu nivel: <strong>${niveles[nivelCarrera] || 'N/A'}</strong> | Premio: <strong>${formatNumber(bonus)} Gs</strong>`;
+        info.innerHTML = `Menor nivel del equipo: <strong>${niveles[nivelEquipo] || 'N/A'}</strong> | Tu nivel: <strong>${niveles[nivelCarrera] || 'N/A'}</strong> | Premio: <strong>${formatNumber(bonus)} Gs</strong>`;
 
         if (nivelCarrera < 2) {
             requisitos.style.display = 'block';
@@ -126,12 +129,18 @@ const UI = (function() {
                         <div class="multiplier-title">${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</div>`;
             
             multConfig[tipo].forEach(item => {
-                // Lógica para marcar la fila activa
                 const tabla = multConfig[tipo];
-                const index = tabla.findIndex(t => t.min === item.min);
-                const nextItem = tabla[index - 1]; // En estas tablas el orden es descendente
-                const isActive = valorActual >= item.min && (!nextItem || valorActual < nextItem.min);
-                
+                let isActive = false;
+                if (tipo === 'mora') {
+                    const index = tabla.findIndex(t => t.min === item.min);
+                    const nextItem = tabla[index + 1];
+                    isActive = valorActual >= item.min && (!nextItem || valorActual < nextItem.min);
+                } else {
+                    const index = tabla.findIndex(t => t.min === item.min);
+                    const nextItem = tabla[index - 1]; // En estas tablas el orden es descendente
+                    isActive = valorActual >= item.min && (!nextItem || valorActual < nextItem.min);
+                }
+
                 html += `<div class="multiplier-row ${isActive ? 'active' : ''}" data-tipo="${tipo}" data-valor="${item.min}">
                             <span>${item.text}</span>
                             <span>→ ${Math.round(item.mult * 100)}%</span>
@@ -224,6 +233,6 @@ const UI = (function() {
     return {
         renderAll,
         getFormValues,
-        formatNumber // Exponer para sugerencias
+        formatNumber // Exponer para sugerencias y otros módulos
     };
 })();
