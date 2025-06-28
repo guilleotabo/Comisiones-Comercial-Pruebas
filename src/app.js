@@ -363,7 +363,26 @@ function calcular() {
     updateProgress('progRecuperado', calcularNivel(datos.montoRecuperado, 'recuperado', cfg));
     updateProgress('progCantidad', calcularNivel(datos.cantidad, 'cantidad', cfg));
 
-    const totalEl = document.getElementById('comisionTotal');
+    const totalEl = // Animar el cambio de valor
+const totalElement = document.getElementById('comisionTotal');
+const oldValue = parseInt(totalElement.textContent.replace(/\D/g, '')) || 0;
+const newValue = resultado.total;
+
+// Agregar clase de animación
+totalElement.classList.add('updating');
+
+// Animar contador
+let current = oldValue;
+const increment = (newValue - oldValue) / 30;
+const timer = setInterval(() => {
+    current += increment;
+    if ((increment > 0 && current >= newValue) || (increment < 0 && current <= newValue)) {
+        current = newValue;
+        clearInterval(timer);
+        totalElement.classList.remove('updating');
+    }
+    totalElement.textContent = Math.round(current).toLocaleString('es-PY');
+}, 30);
     const prev = parseMoney(totalEl.textContent) || 0;
     animateValue(totalEl, prev, resultado.total);
 
