@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Mi Lista de Tareas</title>
+    
+    <!-- ⚡ CONEXIÓN CON CSS - Los estilos están en static/css/style.css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- 🌟 Iconos de Font Awesome para hacer la app más bonita -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 🎯 ENCABEZADO DE LA APLICACIÓN -->
+        <header class="header">
+            <h1><i class="fas fa-tasks"></i> Mi Lista de Tareas</h1>
+            <p>Organiza tu día de manera eficiente</p>
+        </header>
+
+        <!-- 📊 PANEL DE ESTADÍSTICAS (se actualiza con JavaScript) -->
+        <div class="stats-panel" id="statsPanel">
+            <div class="stat-card">
+                <i class="fas fa-list"></i>
+                <div>
+                    <span class="stat-number" id="totalTasks">{{ tasks|length }}</span>
+                    <span class="stat-label">Total</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle text-success"></i>
+                <div>
+                    <span class="stat-number" id="completedTasks">
+                        {{ tasks|selectattr('completed')|list|length }}
+                    </span>
+                    <span class="stat-label">Completadas</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock text-warning"></i>
+                <div>
+                    <span class="stat-number" id="pendingTasks">
+                        {{ tasks|rejectattr('completed')|list|length }}
+                    </span>
+                    <span class="stat-label">Pendientes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ➕ FORMULARIO PARA AGREGAR NUEVAS TAREAS -->
+        <div class="add-task-section">
+            <form action="/add_task" method="POST" class="add-task-form">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="task" 
+                        placeholder="¿Qué necesitas hacer hoy?" 
+                        required
+                        maxlength="200"
+                        class="task-input"
+                    >
+                    <button type="submit" class="add-btn">
+                        <i class="fas fa-plus"></i> Agregar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 📝 LISTA DE TAREAS -->
+        <div class="tasks-section">
+            {% if tasks %}
+                <div class="tasks-list" id="tasksList">
+                    {% for task in tasks %}
+                    <div class="task-item {{ 'completed' if task.completed else '' }}" data-task-id="{{ task.id }}">
+                        <div class="task-content">
+                            <button 
+                                class="complete-btn {{ 'completed' if task.completed else '' }}"
+                                onclick="toggleTask({{ task.id }})"
+                                title="{{ 'Marcar como pendiente' if task.completed else 'Marcar como completada' }}"
+                            >
+                                <i class="fas {{ 'fa-check-circle' if task.completed else 'fa-circle' }}"></i>
+                            </button>
+                            
+                            <div class="task-text">
+                                <span class="task-description">{{ task.text }}</span>
+                                <small class="task-date">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    Creada: {{ task.created_at }}
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <button 
+                            class="delete-btn"
+                            onclick="deleteTask({{ task.id }})"
+                            title="Eliminar tarea"
+                        >
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- 🎉 MENSAJE CUANDO NO HAY TAREAS -->
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h3>¡Todo listo!</h3>
+                    <p>No tienes tareas pendientes. Agrega una nueva tarea arriba.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ⚡ CONEXIÓN CON JAVASCRIPT - La interactividad está en static/js/app.js -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
